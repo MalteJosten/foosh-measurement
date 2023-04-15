@@ -1,0 +1,82 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[ngerman]{babel}         % Neue deutsche Rechtschreibung
+\usepackage[T1]{fontenc}            % Bessere Schriftdarstellung
+\usepackage{lmodern}                % Aktuelle Schrift
+
+\usepackage[intlimits]{amsmath}     % Zusaetzliche Matheumgebungen
+\usepackage{amssymb}                % Mathematische Symbole
+\usepackage{graphicx}               % notwendig fuer \includegraphics
+\usepackage{fancyhdr}               % Kopf- und Fusszeile
+\usepackage{lastpage}               % erzeugt Referez zu der letzten Seite
+\usepackage{moreverb}               % verbatimtab Umgeung
+\usepackage{tikz}
+\usepackage{xcolor}
+\usetikzlibrary{decorations.pathmorphing,shapes,decorations.text,decorations,calc,positioning,automata,matrix,arrows}
+
+
+% Seiteneinstelungen
+\setlength\textwidth{165mm}           % Breite
+\setlength\textheight{235mm}          % Hoehe
+\setlength\headheight{41pt}           % Hoehe der Kopfzeile
+\setlength\topmargin{-12mm}           % Abstand oben
+\setlength\oddsidemargin{0mm}         % Linker Rand
+\setlength\parindent{0pt}             % und ohne Einrueckung
+\setlength\parskip{1.7\medskipamount} % Absaetze abgesetzt
+\sloppy\pagestyle{fancy}
+
+% Kopf- und Fusszeileeinstellungen
+\renewcommand{\headrulewidth}{0.4pt} 	%obere Trennlinie
+\fancyfoot[C]{Page:~\thepage~of~\pageref{LastPage}} %Seitennummer
+\renewcommand{\footrulewidth}{0.4pt} 	%untere Trennlinie
+
+\newcommand{\R}{\mathbb{R}}                 % reelle Zahlen
+\newcommand{\N}{\mathbb{N}}                 % natuerliche Zahlen
+\newcommand{\e}{\text{e}}                   % eulersche Zahl
+\newcommand{\E}[1]{\cdot10^{#1}}            % x 10^{...}
+\newcommand{\qed}{\hspace*{\fill}q.e.d.}    % Beweis fertig
+\newcommand{\ON}[1]{{\cal O}(#1)}	          %O-Notation
+
+\newcommand{\todo}[1]{\marginpar{\textcolor{red}{TODO: #1}}}
+
+\fancyhead[R]{Malte Josten, 3066184}
+\fancyhead[C]{\large{\bf{<Eins Cooler Titel>}}}
+\fancyhead[L]{\textbf{Master Thesis - Expose}\\ Summer 2023}
+
+\usepackage{listings}
+
+% Unteraufgaben (mit Enumeration)
+\def\labelenumi{(\arabic{enumi})}
+\parindent0mm % keine Absatzeinrückung
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{enumitem}
+\setlist{nosep}
+
+\begin{document}
+\section{Background}
+\begin{itemize}
+    \item[*] What's the goal?
+    \item[*] How do I want to accomplish it?
+    \item[*] Why is it necessary to do it?
+\end{itemize}
+
+\section{What Do I Want To Do?}
+\begin{itemize}
+    \item[*] Framework Overview
+    \item[*] Go through, what each part is and would its capabilities are.
+    \item[*] Show what's scientific about it.
+    \item[*] How to validate/evaluate?
+\end{itemize}
+
+\section{Related Work}
+\# TODO
+
+\section{Time Management}
+\begin{itemize}
+    \item[*] Time table
+\end{itemize}
+
+
+\end{document}
