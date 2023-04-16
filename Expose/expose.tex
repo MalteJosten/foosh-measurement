@@ -54,6 +54,8 @@
 \usepackage{enumitem}
 \setlist{nosep}
 
+\usepackage{dirtree}
+
 \begin{document}
 \section{Background}
 \begin{itemize}
@@ -63,12 +65,38 @@
 \end{itemize}
 
 \section{What Do I Want To Do?}
+\subsection{The General Idea}
 \begin{itemize}
     \item[*] Framework Overview
-    \item[*] Go through, what each part is and would its capabilities are.
+    \item[*] Go through, what each part is and what its capabilities are.
     \item[*] Show what's scientific about it.
     \item[*] How to validate/evaluate?
 \end{itemize}
+
+\subsection{(Example) Structure}
+\dirtree{%
+    .1 .
+    .2 Introduction.
+    .3 Background (current SmartHome technologies etc.).
+    .2 Previous/Related Work.
+    .2 Implementation.
+    .3 Available Data (small set of real world measurements).
+    .3 Artificial Intelligence (\textit{$\leftarrow$ more specific}).
+    .4 Network Model.
+    .4 Validation.
+    .3 Simulation.
+    .4 Base Model.
+    .4 How to simulate temperature, brightness, etc..
+    .4 What is used for simulation.
+    .5 User input.
+    .5 Inferred data.
+    .3 Symbolic Regression.
+    .4 ?.
+    .2 Evaluation.
+    .3 Validation (with real world data).
+    .3 Comparison between different implementations.
+    .2 Conclusion and Future Work.
+}
 
 \section{Related Work}
 \# TODO
