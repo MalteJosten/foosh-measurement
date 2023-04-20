@@ -1,0 +1,19 @@
+\section{Math}
+
+In case you need to include some math,
+the \emph{amsmath} package\footnote{\url{https://texdoc.net/texmf-dist/doc/latex/amsmath/amsmath.pdf}} is already included in this document.
+
+To properly display some short formula like \( e^{i \pi} = -1\),
+you can use the \verb+\( \)+ inline command.
+For larger formulas, the \verb+math+ environment is more appropriate.
+If you need to reference the formula multiple times,
+e.g. in case it is used in theorems,
+you should use the \verb+equation+ environment:
+
+\begin{equation}
+	\vec\nabla\times\vec{B}= \mu_0\vec{j}+\mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
+	\label{func}
+\end{equation}
+
+To reference it as~\ref{func} using the \verb+\ref{}+ command,
+remember to use a \verb+\label{}+.
