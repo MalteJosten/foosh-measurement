@@ -182,7 +182,13 @@ sorting=anyt
 
 % here the titlepage is included. Look into the file "frontpage.tex" to
 % adapt it to your needs (name, title etc.)
-\input{frontpage}
+\def\front_lang{1}
+
+\if\front_lang0
+	\input{frontpage_de}
+\else
+	\input{frontpage_en}
+\fi
 
 % Select either german or english here
 \selectlanguage{english}
@@ -200,10 +206,13 @@ sorting=anyt
 % There cannot be an include statement inside of an "included" file.
 % So if you want to further divide your document - use \input inside of
 % the included files. \input will not begin on a new page.
-\input{content/introduction}
-\input{content/related_work}
-\input{content/eval}
-\input{content/conclusion}
+\include{content/introduction}
+\include{content/background/background}
+\include{content/related_work/related_work}
+\include{content/framework/framework}
+\include{content/proof_of_concept/proof_of_concept}
+\include{content/eval}
+\include{content/conclusion}
 
 
 % Appendix chapters to be put here. They will be enumerated with capital letters
