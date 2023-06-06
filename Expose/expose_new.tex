@@ -67,13 +67,18 @@ The framework/smart home system then decides which action(s) yield(s) the desire
 
 
 \section{The Framework}
-- Read sensor data and train prediction model in or outside of framework? \\
-- Own "Smart Home Interface" or connect to existing APIs (if available)? \\
+- Read in sensor data and train prediction model in or outside of framework? \\
+- Own "Smart Home Interface" and/or connect to existing APIs (if available)? \\
 - It should be possible to use an abritary prediction method and integrate all available smart home systems (if API is available) \\
-- Rough architecture sketch
+\begin{figure}[h!]
+   \centering
+   \includegraphics[width=.75\textwidth]{fw-architecture.png} 
+   \caption{Sample framework architecture}
+\end{figure}
 %Reading in the sensor data, training the models and passing forward instructions, e.g., "Give me an efficient control sequence to raise the room's temperature to 24 degrees," should be done entirely be the framework.
 %The framework also should offer an interface to one can connect the smart home API to pass forward the acquired control sequence.
 
+\newpage
 \section{Proof of Concept}
 To show that the developed framework works as intended and a variety of prediction techniques can be integrated, two prediction methods will be implemented, trained, and integrated into the framework.
 For this, fitting AI-model and a small program which uses functions derived from symbolic regression will be created.
@@ -122,27 +127,32 @@ The evaluation will be based on the success of the proof of concept and the fram
 \begin{minipage}[t]{.45\textwidth}
     \textbf{Week 1-2}
     \begin{itemize}
-        \item 
+        \item Framework Design
     \end{itemize}
     \textbf{Week 5-6}
     \begin{itemize}
-        \item 
+        \item Framework Implementation
     \end{itemize}
     \textbf{Week 9-10}
     \begin{itemize}
-        \item 
+        \item PoC: AI
     \end{itemize}
     \textbf{Week 13-14}
     \begin{itemize}
-        \item 
+        \item Ch. 4 Framework
     \end{itemize}
     \textbf{Week 17-18}
     \begin{itemize}
-        \item 
+        \item Ch. 5 Proof of Concept
+        \item[]
+        \item[]
     \end{itemize}
     \textbf{Week 21-22}
     \begin{itemize}
-        \item 
+        \item Ch. 2 Background
+        \item Ch. 3 Related Work
+        \item Ch. 1 Introduction
+        \item Ch. 7 Conclusion
     \end{itemize}
     \textbf{Week 25-26}
     \begin{itemize}
@@ -153,28 +163,32 @@ The evaluation will be based on the success of the proof of concept and the fram
 \begin{minipage}[t]{.45\textwidth}
     \textbf{Week 3-4}
     \begin{itemize}
-        \item 
+        \item Framework Design 
     \end{itemize}
     \textbf{Week 7-8}
     \begin{itemize}
-        \item 
+        \item Framework Implementation
     \end{itemize}
     \textbf{Week 11-12}
     \begin{itemize}
-        \item 
+        \item PoC: Symbolic Regression
     \end{itemize}
     \textbf{Week 15-16}
     \begin{itemize}
-        \item 
+        \item Ch. 4 Framework
     \end{itemize}
     \textbf{Week 19-20}
     \begin{itemize}
-        \item 
+        \item Ch. 6 Evaluation
+        \item Ch. 2 Background
+        \item Ch. 3 Related Work
     \end{itemize}
     \textbf{Week 23-24}
     \begin{itemize}
         \item Buffer
     \end{itemize}
 \end{minipage}
+
+%Note: Looking for and organizing related work is done concurrently with all the other tasks.
 
 \end{document}

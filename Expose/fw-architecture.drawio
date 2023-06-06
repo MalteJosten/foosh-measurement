@@ -1,0 +1,89 @@
+<mxfile host="app.diagrams.net" modified="2023-04-24T13:25:56.752Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" etag="MeBlERIPdplH_Vqlex4N" version="21.1.8" type="device">
+  <diagram name="Page-1" id="jGEyU-uc71ufCI-bmgzL">
+    <mxGraphModel dx="1968" dy="616" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="160" width="460" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-2" value="Framework Connection Layer" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="170" width="440" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-3" value="Prediction Interface" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="360" width="210" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-5" value="Smart Home Interface" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="360" width="100" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-6" value="User Interface" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="360" width="100" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-11" value="external Prediction Model" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-50" y="360" width="110" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-12" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.002;exitY=0.624;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.991;entryY=0.631;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="VrIG-b1eH7eB_jpgKfKW-3" target="VrIG-b1eH7eB_jpgKfKW-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="90" y="490" as="sourcePoint" />
+            <mxPoint x="110" y="290" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-13" value="" style="endArrow=classic;html=1;rounded=0;exitX=1.006;exitY=0.239;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.235;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="VrIG-b1eH7eB_jpgKfKW-11" target="VrIG-b1eH7eB_jpgKfKW-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="90" y="440" as="sourcePoint" />
+            <mxPoint x="140" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-14" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="VrIG-b1eH7eB_jpgKfKW-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="70" y="360" as="sourcePoint" />
+            <mxPoint x="260" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-15" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.289;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.141;exitY=1.008;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="VrIG-b1eH7eB_jpgKfKW-2" target="VrIG-b1eH7eB_jpgKfKW-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="312" y="370" as="sourcePoint" />
+            <mxPoint x="344" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-16" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.289;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.141;exitY=1.008;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="396.5" y="301" as="sourcePoint" />
+            <mxPoint x="395.5" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-17" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="442.5" y="360" as="sourcePoint" />
+            <mxPoint x="444.5" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-18" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.289;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.141;exitY=1.008;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="530.5" y="301" as="sourcePoint" />
+            <mxPoint x="529.5" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-20" value="User" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="560" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-21" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="VrIG-b1eH7eB_jpgKfKW-20" target="VrIG-b1eH7eB_jpgKfKW-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="620" as="sourcePoint" />
+            <mxPoint x="500" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-22" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" source="VrIG-b1eH7eB_jpgKfKW-5" parent="1" target="VrIG-b1eH7eB_jpgKfKW-23">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="620" as="sourcePoint" />
+            <mxPoint x="530" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrIG-b1eH7eB_jpgKfKW-23" value="Smart Home API" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="560" width="100" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
