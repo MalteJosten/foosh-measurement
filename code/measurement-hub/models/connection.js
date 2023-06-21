@@ -5,7 +5,7 @@ const env  = envy();
 
 function connectToDB() {
     mongoose
-        .connect(env.URI)
+        .connect(env.uri)
         .then(() => {
             console.log("Connected to MongoDB");
         })
