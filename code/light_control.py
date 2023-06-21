@@ -2,6 +2,7 @@ import requests
 import time
 import random
 
+
 class LightControl:
     api_point = "192.168.108.103:8080"
     api_path  = "Shelly_PlugS_Power"
@@ -10,7 +11,7 @@ class LightControl:
         state = "OFF"
         if to:
             state = "ON"
-        
+
         res = requests.post(
                 "http://" + self.api_point + "/rest/items/" + self.api_path,
                 headers = {
@@ -21,13 +22,10 @@ class LightControl:
 
         print(res)
 
-        if to:
-            print("Turned light on")
-        else:
-            print("Turned light off")
+        print("Turned light {}".format(state))
 
     def chooseBehavior(self):
-        choice = random.randint(0,1)
+        choice = random.randint(0, 1)
 
         self.turnOnOff((choice == 1))
 
@@ -35,6 +33,6 @@ class LightControl:
 lc = LightControl()
 lc.turnOnOff(False)
 
-while(True):
+while (True):
     time.sleep(5)
     lc.chooseBehavior()
