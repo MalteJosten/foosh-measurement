@@ -8,9 +8,6 @@ router.post('/', addDataPoint);
 
 
 function addDataPoint(req, res) {
-    console.log("Request body: ", req.body);
-
-   
     openHab.getItems()
         .then((items) => {
             let data = new DataPoint({
