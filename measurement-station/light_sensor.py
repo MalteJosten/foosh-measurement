@@ -9,9 +9,14 @@ from network import WLAN, STA_IF
 import secrets
 
 
-PROBES   = 10
+# Number of probes which are used to return an averaged value.
+PROBES = 10
+# Number of seconds to wait before starting with the next measurement cycle.
 INTERVAL = 15
+# URL to which the POST-Request is sent to.
 REQUEST_URL = "http://192.168.108.65:3000/add"
+# Number of seconds to wait for the network connection to be established.
+CON_TIMEOUT = 10
 
 
 class LightSensor():
@@ -24,17 +29,22 @@ class LightSensor():
             wlan = WLAN(STA_IF)
             wlan.active(True)
 
+            # Check if device is already connected to a network...
             if not(wlan.isconnected()):
+                # ...if not, try connect.
                 wlan.connect(secrets.SSID, secrets.PWD)
 
-                timeout = 10
+                # Wait for the connection to be established.
+                timeout = CON_TIMEOUT
                 while timeout > 0:
+                    # Something went wrong...
                     if (wlan.status() < 0 or wlan.status() > 3):
                         break
 
                     timeout -= 1
                     sleep(1)
 
+                # wlan.status = 3 indicates success.
                 if (wlan.status != 3):
                     print("Could not connect to network.\n Resetting...")
                     sleep(1)
@@ -83,9 +93,11 @@ def average(list):
 ls = LightSensor(28)
 ls.connect()
 
+# Wait for the connection.
 while not(ls.has_connection):
     sleep(0.1)
 
+# Start measuremnt loop.
 while True:
     readings = []
     for i in range(0, PROBES):
