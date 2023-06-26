@@ -2,7 +2,6 @@
 # and "Connecting to the Internet with Raspberry Pi Pico W', https://datasheets.raspberrypi.com/picow/connecting-to-the-internet-with-pico-w.pdf
 from machine import ADC, Pin, reset
 from time import sleep
-from math import pow
 from urequests import post
 from ujson import dumps
 from network import WLAN, STA_IF
@@ -71,8 +70,6 @@ class LightSensor():
 
     def read_light(self):
         light = self.adc.read_u16()
-        light = self.map_range(light, 3900, 65535, 0, 1)
-        light = 100 * pow(light, 10)
 
         return light
 
