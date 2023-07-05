@@ -8,12 +8,10 @@ router.post('/', addDataPoint);
 
 
 function addDataPoint(req, res) {
-    console.log(req.body);
-    /*
     openHab.getItems()
         .then((items) => {
             let data = new DataPoint({
-                timestamp: constructTimestamp(),
+                timestamp: Date.now(),
                 value    : req.body.value,
                 items    : items
             });
@@ -22,8 +20,6 @@ function addDataPoint(req, res) {
             res.status(200).send({ msg: "Saved data point" });
 
         });
-    */
-    res.status(200).send({ msg: "Saved data point" });
 }
 
 function constructTimestamp() {
