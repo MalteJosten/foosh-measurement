@@ -1,10 +1,11 @@
 import requests
 import time
+from datetime import datetime
 import random
 
 
 class LightControl:
-    api_point = "192.168.108.103:8080"
+    api_point = "localhost:8080"
     api_path  = "Shelly_PlugS_Power"
 
     def turnOnOff(self, to):
@@ -20,9 +21,8 @@ class LightControl:
                     },
                 data = state)
 
-        print(res)
-
-        print("Turned light {}".format(state))
+        with open("log.txt", "a") as log_file:
+            log_file.write("{}: Turned light {}\n".format(datetime.now(), state))
 
     def chooseBehavior(self):
         choice = random.randint(0, 1)
