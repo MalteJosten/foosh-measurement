@@ -31,14 +31,14 @@ public class DeviceDescription extends AbstractDeviceDescription {
         }
         properties.put("tags", tags);
 
-        JsonNode groupNode = description.get("tags");
+        JsonNode groupNode = description.get("groupNames");
         Iterator<JsonNode> groupIter = groupNode.elements();
         List<String> groups = new ArrayList<>();
 
         while (groupIter.hasNext()) {
-            tags.add(groupIter.next().asText());
+            groups.add(groupIter.next().asText());
         }
-        properties.put("tags", tags);
+        properties.put("groups", groups);
     }
 
     public Map<String, Object> getProperties() {
