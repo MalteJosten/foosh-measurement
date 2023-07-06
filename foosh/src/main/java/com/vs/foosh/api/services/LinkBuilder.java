@@ -1,7 +1,9 @@
 package com.vs.foosh.api.services;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -49,5 +51,15 @@ public class LinkBuilder {
             .build();
 
         return uri.toUri();
+    }
+
+    public static Map<String, Object> getJSONLinkBlock(Map<String, String> linkMapping) {
+        Map<String, Object> linkBlock = new HashMap<>();
+
+        for (String key: linkMapping.keySet()) {
+            linkBlock.put(key, linkMapping.get(key));
+        }
+
+        return linkBlock;
     }
 }

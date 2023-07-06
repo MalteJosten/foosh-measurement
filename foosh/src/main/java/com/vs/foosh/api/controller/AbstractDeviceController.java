@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.ResourceAccessException;
 
@@ -45,9 +46,12 @@ public abstract class AbstractDeviceController {
     
     @GetMapping(value = "/devices", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> devicesGet() {
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
+
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("devices", DeviceList.getDevices());
-        responseBody.put("self", LinkBuilder.getDeviceListLink());
+        responseBody.put("links", linkBlock);
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
@@ -66,9 +70,12 @@ public abstract class AbstractDeviceController {
 
             DeviceList.setDevices(apiResponse.getDevices());
 
+            Map<String, String> linkBlock = new HashMap<>();
+            linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
+
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("devices", DeviceList.getDevices());
-            responseBody.put("self", LinkBuilder.getDeviceListLink());
+            responseBody.put("links", linkBlock);
 
             return new ResponseEntity<>(responseBody, HttpStatus.OK);
         } catch (ResourceAccessException rAccessException) {
@@ -78,8 +85,20 @@ public abstract class AbstractDeviceController {
         }
     }
 
+    @PutMapping("/devices")
+    public ResponseEntity<Object> devicesPut() {
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", "You can only update the devices list with POST!");
+        responseBody.put("links", linkBlock);
+
+        return new ResponseEntity<>(responseBody, HttpStatus.NOT_IMPLEMENTED);
+    }
+
     @PatchMapping("/devices")
-    public String devicesPut() {
+    public String devicesPatch() {
         //TODO: Allow batch modification (queryName).
         return "";
     }
@@ -88,9 +107,12 @@ public abstract class AbstractDeviceController {
     public ResponseEntity<Object> devicesDelete() {
         DeviceList.clearDevices();
 
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
+
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("devices", DeviceList.getDevices());
-        responseBody.put("self", LinkBuilder.getDeviceListLink());
+        responseBody.put("links", linkBlock);
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
@@ -113,18 +135,45 @@ public abstract class AbstractDeviceController {
     }
 
     @PostMapping("/device/{id}")
-    public AbstractDevice devicePost(@PathVariable("id") Long id) {
-        return null;
+    public ResponseEntity<Object> devicePost(@PathVariable("id") String id) {
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", "You can only create/replace a device with either POST or PATCH on /devices!");
+        responseBody.put("links", linkBlock);
+
+        return new ResponseEntity<>(responseBody, HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @PutMapping("/device/{id}")
+    public ResponseEntity<Object> devicePut(@PathVariable("id") String id) {
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", "You can only create/replace a device with either POST or PATCH on /devices!");
+        responseBody.put("links", linkBlock);
+
+        return new ResponseEntity<>(responseBody, HttpStatus.NOT_IMPLEMENTED);
     }
 
     /// Allow modification to queryName.
     @PatchMapping("/device/{id}")
-    public AbstractDevice devicePut(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> devicesPatch(@PathVariable("id") String id) {
         return null;
     }
 
     @DeleteMapping("/device/{id}")
-    public void deviceDelete(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deviceDelete(@PathVariable("id") String id) {
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", "You cannot delete an individual device. You can only delete the entire collection with DELETE on /devices!");
+        responseBody.put("links", linkBlock);
+
+        return new ResponseEntity<>(responseBody, HttpStatus.NOT_IMPLEMENTED);
 
     }
 }
