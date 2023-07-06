@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -21,12 +22,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.vs.foosh.api.model.AbstractSmartHomeCredentials;
-import com.vs.foosh.api.exceptions.SmartHomeAccessException;
-import com.vs.foosh.api.exceptions.SmartHomeIOException;
+import com.vs.foosh.api.exceptions.*;
 import com.vs.foosh.api.model.AbstractDevice;
 import com.vs.foosh.api.model.DeviceList;
 import com.vs.foosh.api.model.FetchDeviceResponse;
 import com.vs.foosh.api.services.LinkBuilder;
+import com.vs.foosh.api.services.HttpResponseBuilder;
 import com.vs.foosh.custom.SmartHomeCredentials;
 
 public abstract class AbstractDeviceController {
@@ -49,11 +50,10 @@ public abstract class AbstractDeviceController {
         Map<String, String> linkBlock = new HashMap<>();
         linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
 
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("devices", DeviceList.getDevices());
-        responseBody.put("links", linkBlock);
-
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        return HttpResponseBuilder.buildResponse(
+            new AbstractMap.SimpleEntry<String, Object>("devices", DeviceList.getDevices()),
+            linkBlock,
+            HttpStatus.OK);
     }
 
     @PostMapping(value = "/devices", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -73,11 +73,10 @@ public abstract class AbstractDeviceController {
             Map<String, String> linkBlock = new HashMap<>();
             linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
 
-            Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("devices", DeviceList.getDevices());
-            responseBody.put("links", linkBlock);
-
-            return new ResponseEntity<>(responseBody, HttpStatus.OK);
+            return HttpResponseBuilder.buildResponse(
+                new AbstractMap.SimpleEntry<String, Object>("devices", DeviceList.getDevices()),
+                linkBlock,
+                HttpStatus.OK);
         } catch (ResourceAccessException rAccessException) {
             throw new SmartHomeAccessException(smartHomeCredentials.getUri() + "/devices");
         } catch (IOException ioException) {
@@ -87,14 +86,9 @@ public abstract class AbstractDeviceController {
 
     @PutMapping("/devices")
     public ResponseEntity<Object> devicesPut() {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
-
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("message", "You can only update the devices list with POST!");
-        responseBody.put("links", linkBlock);
-
-        return new ResponseEntity<>(responseBody, HttpStatus.NOT_IMPLEMENTED);
+        throw new HttpMappingNotImplementedException(
+            "You can only update the devices list with POST!",
+            Map.of("self", LinkBuilder.getDeviceListLink().toString()));
     }
 
     @PatchMapping("/devices")
@@ -125,37 +119,36 @@ public abstract class AbstractDeviceController {
     //
 
     @GetMapping("/device/{id}")
-    public ResponseEntity<AbstractDevice> deviceGet(@PathVariable("id") String id) {
+    public ResponseEntity<Object> deviceGet(@PathVariable("id") String id) {
         Optional<AbstractDevice> device = DeviceList.getDevice(id);
-        // if (device.isPresent()) {
-        //     return ResponseEntity.ok().body(device.get());
-        // }
-        
-        return ResponseEntity.ok().body(device.get());
+
+        if (device.isPresent()) {
+            Map<String, String> linkBlock = new HashMap<>();
+            linkBlock.put("self",    LinkBuilder.getDeviceLink(id).toString());
+            linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("device", device);
+            responseBody.put("links", linkBlock);
+
+            return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        } else {
+            throw new DeviceIdNotFoundException(id);
+        }
     }
 
     @PostMapping("/device/{id}")
     public ResponseEntity<Object> devicePost(@PathVariable("id") String id) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
-
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("message", "You can only create/replace a device with either POST or PATCH on /devices!");
-        responseBody.put("links", linkBlock);
-
-        return new ResponseEntity<>(responseBody, HttpStatus.NOT_IMPLEMENTED);
+        throw new HttpMappingNotImplementedException(
+            "You can only create/replace a device with either POST or PATCH on /devices !",
+            Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
     }
 
     @PutMapping("/device/{id}")
     public ResponseEntity<Object> devicePut(@PathVariable("id") String id) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
-
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("message", "You can only create/replace a device with either POST or PATCH on /devices!");
-        responseBody.put("links", linkBlock);
-
-        return new ResponseEntity<>(responseBody, HttpStatus.NOT_IMPLEMENTED);
+        throw new HttpMappingNotImplementedException(
+            "You can only create/replace a device with either POST or PATCH on /devices !",
+            Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
     }
 
     /// Allow modification to queryName.
@@ -166,14 +159,8 @@ public abstract class AbstractDeviceController {
 
     @DeleteMapping("/device/{id}")
     public ResponseEntity<Object> deviceDelete(@PathVariable("id") String id) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
-
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("message", "You cannot delete an individual device. You can only delete the entire collection with DELETE on /devices!");
-        responseBody.put("links", linkBlock);
-
-        return new ResponseEntity<>(responseBody, HttpStatus.NOT_IMPLEMENTED);
-
+        throw new HttpMappingNotImplementedException(
+            "You cannot delete an individual device. You can only delete the entire collection with DELETE on /devices !",
+            Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
     }
 }
