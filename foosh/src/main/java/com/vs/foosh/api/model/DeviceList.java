@@ -18,7 +18,11 @@ public class DeviceList {
     }
 
     public static void setDevices(List<AbstractDevice> deviceList) {
-        devices = deviceList;
+        if (devices != null) {
+            clearDevices();
+        }
+
+        getInstance().addAll(deviceList);
     }
 
     public void pushDevice(AbstractDevice device) {

@@ -17,6 +17,7 @@ import java.util.Optional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -124,8 +125,9 @@ public abstract class AbstractDeviceController {
 
         if (device.isPresent()) {
             Map<String, String> linkBlock = new HashMap<>();
-            linkBlock.put("self",    LinkBuilder.getDeviceLink(id).toString());
-            linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+            linkBlock.put("selfStatic", LinkBuilder.getDeviceLink(DeviceList.getDevice(id).get().getId().toString()).toString());
+            linkBlock.put("selfQuery",  LinkBuilder.getDeviceLink(DeviceList.getDevice(id).get().getQueryName()).toString());
+            linkBlock.put("devices",    LinkBuilder.getDeviceListLink().toString());
 
             Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("device", device);

@@ -1,7 +1,9 @@
 package com.vs.foosh.api.model;
 
-import java.net.URI;
+import java.util.Map;
 import java.util.UUID;
+
+import com.vs.foosh.api.exceptions.QueryNameIsNotUniqueException;
 
 public abstract class AbstractDevice {
     protected UUID id;
@@ -10,10 +12,13 @@ public abstract class AbstractDevice {
     protected String type;
     protected AbstractDeviceDescription description;
 
-    protected URI self;
-    protected URI devices;
+    protected Map<String, String> links;
 
     protected abstract void setObjectFields();
+
+    public UUID getId() {
+        return this.id;
+    }
 
     public String getQueryName() {
         return this.queryName;
@@ -22,11 +27,17 @@ public abstract class AbstractDevice {
     public void setQueryName(String name) {
         if (DeviceList.isAUniqueQueryName(name)) {
             this.queryName = name;
+        } else {
+            throw new QueryNameIsNotUniqueException(this.id.toString(), this.queryName);
         }
     }
 
-    public UUID getId() {
-        return this.id;
+    public String getDeviceName() {
+        return this.deviceName;
+    }
+
+    public String getType() {
+        return this.type;
     }
 
     public AbstractDeviceDescription getDescription() {
@@ -37,9 +48,13 @@ public abstract class AbstractDevice {
         this.description = description;
     }
 
+    public Map<String, String> getLinks() {
+        return this.links;
+    }
+
     @Override
     public String toString() {
         return "Device: " + id + "\nName: " + deviceName + "\nQuery-Name: " + queryName + "\nType: " + type
-                + "\nselfLink: " + self.toString() + "\nDevices: " + devices.toString();
+                + "\nlinks: " + links.toString();
     }
 }

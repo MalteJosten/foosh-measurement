@@ -1,5 +1,6 @@
 package com.vs.foosh.custom;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,25 +13,30 @@ public class Device extends AbstractDevice {
     public Device(JsonNode description) {
         this.id          = UUID.randomUUID();
         this.description = new DeviceDescription(description);
+        setObjectFields();
 
         //TODO: Set unique queryName
         setQueryName(this.description.getProperties().get("name").toString());
-        setObjectFields();
 
-        this.self    = LinkBuilder.buildPath(List.of("device", this.id.toString()));
-        this.devices = LinkBuilder.getDeviceListLink();
-    }
+        this.links = new HashMap<>();
+        this.links.put("selfStatic", LinkBuilder.buildPath(List.of("device", this.id.toString())).toString());
+        this.links.put("selfQuery",  LinkBuilder.buildPath(List.of("device", this.queryName)).toString());
+        this.links.put("devices", LinkBuilder.getDeviceListLink().toString());
+    }        
 
     public Device(JsonNode description, String queryName) {
         this.id          = UUID.randomUUID();
         this.description = new DeviceDescription(description);
-
-        //TODO: Check for uniqueness
-        setQueryName(queryName);
         setObjectFields();
 
-        this.self    = LinkBuilder.buildPath(List.of("device", this.id.toString()));
-        this.devices = LinkBuilder.getDeviceListLink();
+        //TODO: Set unique queryName
+        setQueryName(queryName);
+        this.deviceName = this.description.getProperties().get("name").toString();
+
+        this.links = new HashMap<>();
+        this.links.put("selfStatic", LinkBuilder.buildPath(List.of("device", this.id.toString())).toString());
+        this.links.put("selfQuery",  LinkBuilder.buildPath(List.of("device", this.queryName)).toString());
+        this.links.put("devices",    LinkBuilder.getDeviceListLink().toString());
     }
 
     @Override
