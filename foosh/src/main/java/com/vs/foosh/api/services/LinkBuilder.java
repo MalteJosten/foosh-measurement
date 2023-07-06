@@ -2,7 +2,6 @@ package com.vs.foosh.api.services;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;

@@ -11,7 +11,6 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vs.foosh.api.controller.AbstractDeviceController;
 import com.vs.foosh.api.model.AbstractDevice;
 import com.vs.foosh.api.model.AbstractSmartHomeCredentials;
@@ -23,7 +22,6 @@ public class DeviceController extends AbstractDeviceController {
     @Override
     protected FetchDeviceResponse fetchDevicesFromSmartHomeAPI() throws ResourceAccessException, IOException {
         RestTemplate restTemplate = new RestTemplateBuilder().setConnectTimeout(Duration.ofSeconds(5)).setReadTimeout(Duration.ofSeconds(5)).build();
-        ObjectMapper mapper = new ObjectMapper();
         List<AbstractDevice> devices = new ArrayList<>();
 
         JsonNode response = restTemplate.getForObject(smartHomeCredentials.getUri() + "rest/items", JsonNode.class);
