@@ -1,4 +1,4 @@
-package com.vs.foosh.api.model.exceptions;
+package com.vs.foosh.api.services;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.vs.foosh.services.LinkBuilder;
+import com.vs.foosh.api.exceptions.DeviceIdNotFoundException;
+import com.vs.foosh.api.exceptions.QueryNameIsNotUniqueException;
+import com.vs.foosh.api.exceptions.SmartHomeAccessException;
+import com.vs.foosh.api.exceptions.SmartHomeIOException;
 
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {

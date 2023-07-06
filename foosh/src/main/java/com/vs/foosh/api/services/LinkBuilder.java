@@ -1,4 +1,4 @@
-package com.vs.foosh.services;
+package com.vs.foosh.api.services;
 
 import java.net.URI;
 import java.util.List;

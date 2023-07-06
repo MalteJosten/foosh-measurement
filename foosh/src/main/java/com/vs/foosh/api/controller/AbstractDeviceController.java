@@ -20,13 +20,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.vs.foosh.api.model.AbstractSmartHomeCredentials;
+import com.vs.foosh.api.exceptions.SmartHomeAccessException;
+import com.vs.foosh.api.exceptions.SmartHomeIOException;
 import com.vs.foosh.api.model.AbstractDevice;
 import com.vs.foosh.api.model.DeviceList;
 import com.vs.foosh.api.model.FetchDeviceResponse;
-import com.vs.foosh.api.model.exceptions.SmartHomeAccessException;
-import com.vs.foosh.api.model.exceptions.SmartHomeIOException;
+import com.vs.foosh.api.services.LinkBuilder;
 import com.vs.foosh.custom.SmartHomeCredentials;
-import com.vs.foosh.services.LinkBuilder;
 
 public abstract class AbstractDeviceController {
 

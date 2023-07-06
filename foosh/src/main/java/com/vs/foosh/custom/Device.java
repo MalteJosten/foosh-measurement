@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vs.foosh.api.model.AbstractDevice;
-import com.vs.foosh.services.LinkBuilder;
+import com.vs.foosh.api.services.LinkBuilder;
 
 public class Device extends AbstractDevice {
 

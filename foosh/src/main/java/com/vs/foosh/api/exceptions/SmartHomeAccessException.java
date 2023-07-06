@@ -1,4 +1,4 @@
-package com.vs.foosh.api.model.exceptions;
+package com.vs.foosh.api.exceptions;
 
 public class SmartHomeAccessException extends RuntimeException {
     private String uri;

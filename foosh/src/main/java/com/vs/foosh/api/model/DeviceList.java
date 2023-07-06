@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.vs.foosh.api.model.exceptions.QueryNameIsNotUniqueException;
+import com.vs.foosh.api.exceptions.QueryNameIsNotUniqueException;
 
 public class DeviceList {
     private static List<AbstractDevice> devices;
