@@ -1,4 +1,4 @@
-package com.vs.foosh.api.services;
+package com.vs.foosh.api.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +14,7 @@ import com.vs.foosh.api.exceptions.DeviceIdNotFoundException;
 import com.vs.foosh.api.exceptions.QueryNameIsNotUniqueException;
 import com.vs.foosh.api.exceptions.SmartHomeAccessException;
 import com.vs.foosh.api.exceptions.SmartHomeIOException;
+import com.vs.foosh.api.services.LinkBuilder;
 
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
