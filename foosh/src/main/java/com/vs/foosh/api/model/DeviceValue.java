@@ -1,6 +1,6 @@
 package com.vs.foosh.api.model;
 
-public class DeviceValue<T extends Comparable<T>> {
+public class DeviceValue<T> {
     private T value;
 
     public DeviceValue() {

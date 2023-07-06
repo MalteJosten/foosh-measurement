@@ -1,38 +1,63 @@
 package com.vs.foosh.api.model;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import com.vs.foosh.api.model.Exceptions.QueryNameIsNotUniqueException;
+import com.vs.foosh.api.model.exceptions.QueryNameIsNotUniqueException;
 
 public class DeviceList {
-    private static ArrayList<BaseDevice> devices;
+    private static List<AbstractDevice> devices;
 
-    public static ArrayList<BaseDevice> getInstance() {
+    public static List<AbstractDevice> getInstance() {
         if (devices == null) {
-            devices = new ArrayList<BaseDevice>();
+            devices = new ArrayList<AbstractDevice>();
         }
 
         return devices;
     }
 
-    public static void setDevices(ArrayList<BaseDevice> deviceList) {
+    public static void setDevices(List<AbstractDevice> deviceList) {
         devices = deviceList;
     }
 
-    public static void pushDevice(BaseDevice device) {
+    public void pushDevice(AbstractDevice device) {
         if (isAUniqueQueryName(device.getQueryName())) {
-            devices.add(device);
+            getInstance().add(device);
         } else {
-            throw new QueryNameIsNotUniqueException(device.getQueryName());
+            throw new QueryNameIsNotUniqueException(device.getId().toString(), device.getQueryName());
         }
     }
 
-    public static ArrayList<BaseDevice> getDevices() {
-        return devices;
+    public static List<AbstractDevice> getDevices() {
+        return getInstance();
+    }
+
+    public static void clearDevices() {
+        getInstance().clear();
+    }
+
+    ///
+    /// Let the client search for a device by
+    /// (1) it's ID,
+    /// (2) it's queryName
+    ///
+    public static Optional<AbstractDevice> getDevice(String id) {
+        Optional<AbstractDevice> foundDevice = Optional.empty();
+
+        for (AbstractDevice device: getDevices()) {
+            if (device.id.toString().equals(id) || device.queryName.equals(id)) {
+                foundDevice = Optional.of(device);
+                break;
+            }
+        }
+
+        return foundDevice;
+
     }
 
     public static boolean isAUniqueQueryName(String name) {
-        for (BaseDevice d: devices) {
+        for (AbstractDevice d: getInstance()) {
             if (d.getQueryName().equals(name)) {
                 return false;
             }
