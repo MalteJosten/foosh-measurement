@@ -119,21 +119,11 @@ public abstract class AbstractDeviceController {
     // Device
     //
 
-    // Remove link duplication
     @GetMapping("/device/{id}")
     public ResponseEntity<Object> deviceGet(@PathVariable("id") String id) {
         AbstractDevice device = DeviceList.getDevice(id);
 
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("selfStatic", LinkBuilder.getDeviceLink(DeviceList.getDevice(id).getId().toString()).toString());
-        linkBlock.put("selfQuery", LinkBuilder.getDeviceLink(DeviceList.getDevice(id).getQueryName()).toString());
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
-
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("device", device);
-        responseBody.put("links", linkBlock);
-
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        return new ResponseEntity<>(device, HttpStatus.OK);
     }
 
     @PostMapping("/device/{id}")
@@ -171,15 +161,7 @@ public abstract class AbstractDeviceController {
         if (DeviceList.getDevice(id).getQueryName().equals(queryName) || DeviceList.isAUniqueQueryName(queryName)) {
             DeviceList.getDevice(id).setQueryName(queryName);
 
-            Map<String, String> linkBlock = new HashMap<>();
-            linkBlock.put("selfStatic", DeviceList.getDevice(id).getStaticLink().toString());
-            linkBlock.put("selfQuery", DeviceList.getDevice(id).getQueryLink().toString());
-            linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
-
-            return HttpResponseBuilder.buildResponse(
-                    DeviceList.getDevice(id),
-                    linkBlock,
-                    HttpStatus.OK);
+            return new ResponseEntity<>(DeviceList.getDevice(id), HttpStatus.OK);
         } else {
             throw new QueryNameIsNotUniqueException(id, queryName);
         }

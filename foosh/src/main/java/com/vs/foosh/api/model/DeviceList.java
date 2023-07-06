@@ -2,7 +2,6 @@ package com.vs.foosh.api.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.vs.foosh.api.exceptions.DeviceIdNotFoundException;
 import com.vs.foosh.api.exceptions.QueryNameIsNotUniqueException;
