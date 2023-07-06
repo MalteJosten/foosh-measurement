@@ -12,12 +12,10 @@ import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,16 +43,16 @@ public abstract class AbstractDeviceController {
             smartHomeCredentials.loadSmartHomeCredentials();
         };
     }
-    
+
     @GetMapping(value = "/devices", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> devicesGet() {
         Map<String, String> linkBlock = new HashMap<>();
         linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
 
         return HttpResponseBuilder.buildResponse(
-            new AbstractMap.SimpleEntry<String, Object>("devices", DeviceList.getDevices()),
-            linkBlock,
-            HttpStatus.OK);
+                new AbstractMap.SimpleEntry<String, Object>("devices", DeviceList.getDevices()),
+                linkBlock,
+                HttpStatus.OK);
     }
 
     @PostMapping(value = "/devices", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -75,9 +73,9 @@ public abstract class AbstractDeviceController {
             linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
 
             return HttpResponseBuilder.buildResponse(
-                new AbstractMap.SimpleEntry<String, Object>("devices", DeviceList.getDevices()),
-                linkBlock,
-                HttpStatus.OK);
+                    new AbstractMap.SimpleEntry<String, Object>("devices", DeviceList.getDevices()),
+                    linkBlock,
+                    HttpStatus.OK);
         } catch (ResourceAccessException rAccessException) {
             throw new SmartHomeAccessException(smartHomeCredentials.getUri() + "/devices");
         } catch (IOException ioException) {
@@ -88,13 +86,13 @@ public abstract class AbstractDeviceController {
     @PutMapping("/devices")
     public ResponseEntity<Object> devicesPut() {
         throw new HttpMappingNotImplementedException(
-            "You can only update the devices list with POST!",
-            Map.of("self", LinkBuilder.getDeviceListLink().toString()));
+                "You can only update the devices list with POST!",
+                Map.of("self", LinkBuilder.getDeviceListLink().toString()));
     }
 
     @PatchMapping("/devices")
     public String devicesPatch() {
-        //TODO: Allow batch modification (queryName).
+        // TODO: Allow batch modification (queryName).
         return "";
     }
 
@@ -113,56 +111,84 @@ public abstract class AbstractDeviceController {
     }
 
     protected abstract FetchDeviceResponse fetchDevicesFromSmartHomeAPI() throws ResourceAccessException, IOException;
-    protected abstract FetchDeviceResponse fetchDevicesFromSmartHomeAPI(AbstractSmartHomeCredentials credentials) throws ResourceAccessException, IOException;
+
+    protected abstract FetchDeviceResponse fetchDevicesFromSmartHomeAPI(AbstractSmartHomeCredentials credentials)
+            throws ResourceAccessException, IOException;
 
     //
     // Device
     //
 
+    // Remove link duplication
     @GetMapping("/device/{id}")
     public ResponseEntity<Object> deviceGet(@PathVariable("id") String id) {
-        Optional<AbstractDevice> device = DeviceList.getDevice(id);
+        AbstractDevice device = DeviceList.getDevice(id);
 
-        if (device.isPresent()) {
-            Map<String, String> linkBlock = new HashMap<>();
-            linkBlock.put("selfStatic", LinkBuilder.getDeviceLink(DeviceList.getDevice(id).get().getId().toString()).toString());
-            linkBlock.put("selfQuery",  LinkBuilder.getDeviceLink(DeviceList.getDevice(id).get().getQueryName()).toString());
-            linkBlock.put("devices",    LinkBuilder.getDeviceListLink().toString());
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("selfStatic", LinkBuilder.getDeviceLink(DeviceList.getDevice(id).getId().toString()).toString());
+        linkBlock.put("selfQuery", LinkBuilder.getDeviceLink(DeviceList.getDevice(id).getQueryName()).toString());
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
 
-            Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("device", device);
-            responseBody.put("links", linkBlock);
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("device", device);
+        responseBody.put("links", linkBlock);
 
-            return new ResponseEntity<>(responseBody, HttpStatus.OK);
-        } else {
-            throw new DeviceIdNotFoundException(id);
-        }
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @PostMapping("/device/{id}")
     public ResponseEntity<Object> devicePost(@PathVariable("id") String id) {
         throw new HttpMappingNotImplementedException(
-            "You can only create/replace a device with either POST or PATCH on /devices !",
-            Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
+                "You can only create/replace a device with either POST or PATCH on /devices !",
+                Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
     }
 
     @PutMapping("/device/{id}")
     public ResponseEntity<Object> devicePut(@PathVariable("id") String id) {
         throw new HttpMappingNotImplementedException(
-            "You can only create/replace a device with either POST or PATCH on /devices !",
-            Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
+                "You can only create/replace a device with either POST or PATCH on /devices !",
+                Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
     }
 
-    /// Allow modification to queryName.
+    /// no empty string
     @PatchMapping("/device/{id}")
-    public ResponseEntity<Object> devicesPatch(@PathVariable("id") String id) {
-        return null;
+    public ResponseEntity<Object> devicePatch(@PathVariable("id") String id,
+            @RequestBody Map<String, String> requestBody) {
+        String queryName = requestBody.get("queryName");
+
+        // Is a field called 'queryName'?
+        if (queryName == null) {
+            throw new QueryNameIsNullException(id, requestBody);
+        }
+
+        // Does the field contain any letters, i.e., is it not empty?
+        if (queryName.trim().isEmpty()) {
+            throw new QueryNameIsEmptyException(id, requestBody);
+        }
+
+        // Is the name provided by the field unique or the same as the current
+        // queryName?
+        if (DeviceList.getDevice(id).getQueryName().equals(queryName) || DeviceList.isAUniqueQueryName(queryName)) {
+            DeviceList.getDevice(id).setQueryName(queryName);
+
+            Map<String, String> linkBlock = new HashMap<>();
+            linkBlock.put("selfStatic", DeviceList.getDevice(id).getStaticLink().toString());
+            linkBlock.put("selfQuery", DeviceList.getDevice(id).getQueryLink().toString());
+            linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+
+            return HttpResponseBuilder.buildResponse(
+                    DeviceList.getDevice(id),
+                    linkBlock,
+                    HttpStatus.OK);
+        } else {
+            throw new QueryNameIsNotUniqueException(id, queryName);
+        }
     }
 
     @DeleteMapping("/device/{id}")
     public ResponseEntity<Object> deviceDelete(@PathVariable("id") String id) {
         throw new HttpMappingNotImplementedException(
-            "You cannot delete an individual device. You can only delete the entire collection with DELETE on /devices !",
-            Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
+                "You cannot delete an individual device. You can only delete the entire collection with DELETE on /devices !",
+                Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
     }
 }

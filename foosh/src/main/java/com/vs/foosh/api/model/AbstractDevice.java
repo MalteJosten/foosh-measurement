@@ -3,7 +3,7 @@ package com.vs.foosh.api.model;
 import java.util.Map;
 import java.util.UUID;
 
-import com.vs.foosh.api.exceptions.QueryNameIsNotUniqueException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public abstract class AbstractDevice {
     protected UUID id;
@@ -25,11 +25,7 @@ public abstract class AbstractDevice {
     }
 
     public void setQueryName(String name) {
-        if (DeviceList.isAUniqueQueryName(name)) {
-            this.queryName = name;
-        } else {
-            throw new QueryNameIsNotUniqueException(this.id.toString(), this.queryName);
-        }
+        this.queryName = name;
     }
 
     public String getDeviceName() {
@@ -50,6 +46,16 @@ public abstract class AbstractDevice {
 
     public Map<String, String> getLinks() {
         return this.links;
+    }
+
+    @JsonIgnore
+    public String getStaticLink() {
+        return this.links.get("selfStatic");
+    }
+
+    @JsonIgnore
+    public String getQueryLink() {
+        return this.links.get("selfQuery");
     }
 
     @Override

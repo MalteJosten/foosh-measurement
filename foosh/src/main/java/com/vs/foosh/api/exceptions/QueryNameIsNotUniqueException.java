@@ -4,7 +4,7 @@ public class QueryNameIsNotUniqueException extends RuntimeException {
     private String id;
 
     public QueryNameIsNotUniqueException(String id, String name) {
-        super("The queryName '" + name + "' must be unique but is already used.");
+        super("The query name '" + name + "' is not unique!");
         this.id = id;
     }
 

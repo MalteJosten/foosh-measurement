@@ -4,7 +4,7 @@ public class SmartHomeAccessException extends RuntimeException {
     private String uri;
 
     public SmartHomeAccessException(String uri) {
-        super();
+        super("Could not access Smart Home API at '" + uri + "'!");
         this.uri = uri;
     }
     

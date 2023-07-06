@@ -10,11 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.vs.foosh.api.exceptions.DeviceIdNotFoundException;
-import com.vs.foosh.api.exceptions.HttpMappingNotImplementedException;
-import com.vs.foosh.api.exceptions.QueryNameIsNotUniqueException;
-import com.vs.foosh.api.exceptions.SmartHomeAccessException;
-import com.vs.foosh.api.exceptions.SmartHomeIOException;
+import com.vs.foosh.api.exceptions.*;
 import com.vs.foosh.api.services.LinkBuilder;
 import com.vs.foosh.api.services.HttpResponseBuilder;
 
@@ -27,9 +23,33 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
 
         return HttpResponseBuilder.buildException(
-                "The query name '" + exception.getId() + "' is not unique!",
+                exception.getMessage(),
                 linkBlock,
                 HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(QueryNameIsNullException.class)
+    public ResponseEntity<Object> handleQueryNameIsNullException(QueryNameIsNullException exception, WebRequest request) {
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("self",    LinkBuilder.getDeviceLink(exception.getId()).toString());
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+
+        return HttpResponseBuilder.buildException(
+                exception.getMessage(),
+                linkBlock,
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(QueryNameIsEmptyException.class)
+    public ResponseEntity<Object> handleQueryNameIsEmptyException(QueryNameIsEmptyException exception, WebRequest request) {
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("self",    LinkBuilder.getDeviceLink(exception.getId()).toString());
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+
+        return HttpResponseBuilder.buildException(
+                exception.getMessage(),
+                linkBlock,
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DeviceIdNotFoundException.class)
@@ -38,7 +58,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
 
         return HttpResponseBuilder.buildException(
-                "Could not find device with id '" + exception.getId() + "' !",
+                exception.getMessage(),
                 linkBlock,
                 HttpStatus.NOT_FOUND);
     }
@@ -46,14 +66,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(SmartHomeAccessException.class)
     public ResponseEntity<Object> handleSmartHomeAccessException(SmartHomeAccessException exception, WebRequest request) {
         return HttpResponseBuilder.buildException(
-                "Could not access Smart Home API at '" + exception.getUri() + "'!",
+                exception.getMessage(),
                 HttpStatus.BAD_GATEWAY);
     }
     
     @ExceptionHandler(SmartHomeIOException.class)
     public ResponseEntity<Object> handleSmartHomeIOException(SmartHomeIOException exception, WebRequest request) {
         return HttpResponseBuilder.buildException(
-                "A timeout occurred while tryping to retrieve device list from Smart Home API at '" + exception.getUri() + "'!",
+                exception.getMessage(),
                 HttpStatus.GATEWAY_TIMEOUT);
     }
 
@@ -64,4 +84,5 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 exception.getReturnPath(),
                 HttpStatus.NOT_IMPLEMENTED);
     }
+
 }

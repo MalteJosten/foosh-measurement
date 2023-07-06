@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.vs.foosh.api.exceptions.DeviceIdNotFoundException;
 import com.vs.foosh.api.exceptions.QueryNameIsNotUniqueException;
 
 public class DeviceList {
@@ -46,18 +47,14 @@ public class DeviceList {
     /// (1) it's ID,
     /// (2) it's queryName
     ///
-    public static Optional<AbstractDevice> getDevice(String id) {
-        Optional<AbstractDevice> foundDevice = Optional.empty();
-
+    public static AbstractDevice getDevice(String id) {
         for (AbstractDevice device: getDevices()) {
             if (device.id.toString().equals(id) || device.queryName.equals(id)) {
-                foundDevice = Optional.of(device);
-                break;
+                return device;
             }
         }
 
-        return foundDevice;
-
+        throw new DeviceIdNotFoundException(id);
     }
 
     public static boolean isAUniqueQueryName(String name) {

@@ -7,7 +7,17 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.vs.foosh.api.model.AbstractDevice;
+
 public class HttpResponseBuilder {
+    public static ResponseEntity<Object> buildResponse(AbstractDevice device, Map<String, String> linkBlock, HttpStatus status) {
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("device", device);
+        responseBody.put("links", linkBlock);
+
+        return new ResponseEntity<>(responseBody, status);
+    }
+
     public static ResponseEntity<Object> buildResponse(AbstractMap.Entry<String, Object> result, Map<String, String> linkBlock, HttpStatus status) {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put(result.getKey(), result.getValue());
