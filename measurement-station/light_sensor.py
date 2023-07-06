@@ -13,7 +13,7 @@ PROBES = 10
 # Number of seconds to wait before starting with the next measurement cycle.
 INTERVAL = 15
 # URL to which the POST-Request is sent to.
-REQUEST_URL = "http://192.168.108.65:3000/add"
+REQUEST_URL = "http://192.168.108.103:3000/add"
 # Number of seconds to wait for the network connection to be established.
 CON_TIMEOUT = 10
 
@@ -44,8 +44,8 @@ class LightSensor():
                     sleep(1)
 
                 # wlan.status = 3 indicates success.
-                if (wlan.status != 3):
-                    print("Could not connect to network.\n Resetting...")
+                if (wlan.status() != 3):
+                    print("Could not connect to network (Status: {}).\nResetting...".format(wlan.status()))
                     sleep(1)
                     reset()
 
