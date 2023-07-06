@@ -1,12 +1,16 @@
 package com.vs.foosh.api.exceptions;
 
-public class QueryNameIsNotUniqueException extends RuntimeException {
-    private String id;
+import com.vs.foosh.api.model.QueryNamePatchRequest;
 
-    public QueryNameIsNotUniqueException(String id, String name) {
-        super("The query name '" + name + "' is not unique!");
-        this.id = id;
+public class QueryNameIsNotUniqueException extends RuntimeException {
+    private QueryNamePatchRequest request;
+
+    public QueryNameIsNotUniqueException(QueryNamePatchRequest request) {
+        super("The query name '" + request.getQueryName() + "' is not unique!");
+        this.request = request;
     }
 
-    public String getId() { return this.id; }
+    public String getId() {
+        return this.request.getId();
+    }
 }

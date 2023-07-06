@@ -1,15 +1,16 @@
 package com.vs.foosh.api.exceptions;
 
-import java.util.Map;
+import com.vs.foosh.api.model.QueryNamePatchRequest;
 
 public class QueryNameIsEmptyException extends RuntimeException {
-    private String id;
-    public QueryNameIsEmptyException(String id, Map<String, String> requestBody) {
-        super("The provided value for the field 'queryName' (" + requestBody.get("queryName").toString() + ") is empty!");
-        this.id = id;
+    private QueryNamePatchRequest request;
+
+    public QueryNameIsEmptyException(QueryNamePatchRequest request) {
+        super("The provided value for the field 'queryName' (" + request.getQueryName() + ") is empty!");
+        this.request = request;
     }
 
     public String getId() {
-        return this.id;
+        return this.request.getId();
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.client.ResourceAccessException;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.boot.CommandLineRunner;
@@ -25,6 +26,7 @@ import com.vs.foosh.api.exceptions.*;
 import com.vs.foosh.api.model.AbstractDevice;
 import com.vs.foosh.api.model.DeviceList;
 import com.vs.foosh.api.model.FetchDeviceResponse;
+import com.vs.foosh.api.model.QueryNamePatchRequest;
 import com.vs.foosh.api.services.LinkBuilder;
 import com.vs.foosh.api.services.HttpResponseBuilder;
 import com.vs.foosh.custom.SmartHomeCredentials;
@@ -91,9 +93,18 @@ public abstract class AbstractDeviceController {
     }
 
     @PatchMapping("/devices")
-    public String devicesPatch() {
-        // TODO: Allow batch modification (queryName).
-        return "";
+    public ResponseEntity<Object> devicesPatch(@RequestBody List<QueryNamePatchRequest> request) {
+        if (patchBatchDeviceQueryName(request)) {
+            Map<String, String> linkBlock = new HashMap<>();
+            linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
+
+            return HttpResponseBuilder.buildResponse(
+                    new AbstractMap.SimpleEntry<String, Object>("devices", DeviceList.getDevices()),
+                    linkBlock,
+                    HttpStatus.OK);
+        } else {
+            throw new BatchQueryNameException();
+        }
     }
 
     @DeleteMapping("/devices")
@@ -142,28 +153,18 @@ public abstract class AbstractDeviceController {
 
     /// no empty string
     @PatchMapping("/device/{id}")
-    public ResponseEntity<Object> devicePatch(@PathVariable("id") String id,
-            @RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<Object> devicePatch(@PathVariable("id") String id, @RequestBody Map<String, String> requestBody) {
         String queryName = requestBody.get("queryName");
 
         // Is a field called 'queryName'?
         if (queryName == null) {
             throw new QueryNameIsNullException(id, requestBody);
         }
-
-        // Does the field contain any letters, i.e., is it not empty?
-        if (queryName.trim().isEmpty()) {
-            throw new QueryNameIsEmptyException(id, requestBody);
-        }
-
-        // Is the name provided by the field unique or the same as the current
-        // queryName?
-        if (DeviceList.getDevice(id).getQueryName().equals(queryName) || DeviceList.isAUniqueQueryName(queryName)) {
-            DeviceList.getDevice(id).setQueryName(queryName);
-
+        
+        if (patchDeviceQueryName(new QueryNamePatchRequest(id, queryName))) {
             return new ResponseEntity<>(DeviceList.getDevice(id), HttpStatus.OK);
         } else {
-            throw new QueryNameIsNotUniqueException(id, queryName);
+            return new ResponseEntity<Object>("Could not patch queryName for device '" + id + "' !'", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -172,5 +173,39 @@ public abstract class AbstractDeviceController {
         throw new HttpMappingNotImplementedException(
                 "You cannot delete an individual device. You can only delete the entire collection with DELETE on /devices !",
                 Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
+    }
+
+    private boolean patchDeviceQueryName(QueryNamePatchRequest request) {
+        String queryName = request.getQueryName();
+        String id = request.getId();
+
+        // Does the field contain any letters, i.e., is it not empty?
+        if (queryName.trim().isEmpty()) {
+            throw new QueryNameIsEmptyException(request);
+        }
+
+        // Is the name provided by the field unique or the same as the current
+        // queryName?
+        if (DeviceList.getDevice(id).getQueryName().equals(queryName) || DeviceList.isAUniqueQueryName(queryName)) {
+            DeviceList.getDevice(id).setQueryName(queryName);
+
+            return true;
+        } else {
+            throw new QueryNameIsNotUniqueException(request);
+        }
+    }
+
+    private boolean patchBatchDeviceQueryName(List<QueryNamePatchRequest> batchRequest) {
+        List<AbstractDevice> olddDeviceList = DeviceList.getInstance();
+
+        for(QueryNamePatchRequest request: batchRequest) {
+            if (!patchDeviceQueryName(request)) {
+                DeviceList.clearDevices();
+                DeviceList.setDevices(olddDeviceList);
+                return false;
+            } 
+        }
+
+        return true;
     }
 }

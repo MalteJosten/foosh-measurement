@@ -29,7 +29,7 @@ public class DeviceList {
         if (isAUniqueQueryName(device.getQueryName())) {
             getInstance().add(device);
         } else {
-            throw new QueryNameIsNotUniqueException(device.getId().toString(), device.getQueryName());
+            throw new QueryNameIsNotUniqueException(new QueryNamePatchRequest(device.getId().toString(), device.getQueryName()));
         }
     }
 
