@@ -39,6 +39,9 @@ const DataPointSchema = new mongoose.Schema({
                     type: String
                 }]
     }]
-});
+    },{
+        collection: "run2"
+    }
+);
 
 module.exports = mongoose.model('DataPoint', DataPointSchema);
