@@ -36,9 +36,9 @@ public class DeviceController extends AbstractDeviceController {
         return new FetchDeviceResponse(true, devices);
     }
 
+    /// For this scenario, no authentication is needed.
     @Override
     protected FetchDeviceResponse fetchDevicesFromSmartHomeAPI(AbstractSmartHomeCredentials credentials) throws ResourceAccessException, IOException {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'fetchDevicesFromSmartHomeAPI'");
     }
     

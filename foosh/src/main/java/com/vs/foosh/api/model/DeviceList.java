@@ -45,8 +45,8 @@ public class DeviceList {
 
     ///
     /// Let the client search for a device by
-    /// (1) it's ID,
-    /// (2) it's queryName
+    ///   (1) it's ID,
+    ///   (2) it's queryName
     ///
     public static AbstractDevice getDevice(String id) {
         for (AbstractDevice device: getDevices()) {
@@ -68,9 +68,11 @@ public class DeviceList {
         return true;
     }
 
+    ///
     /// Check whether the given request contains an unique (new) queryName.
     /// If the queryName is not unique, try and find another unique one by
     /// appending incrementing numbers to deviceName.
+    ///
     public static String findUniqueQueryName(QueryNamePatchRequest request) {
         StringBuilder queryName = new StringBuilder(request.getQueryName());
         String id = request.getId();
@@ -81,8 +83,7 @@ public class DeviceList {
         }
 
         for (int i = 0; i < UNIQUE_QUERY_NAME_TIMEOUT; i++) {
-            // Is the name provided by the field unique or the same as the current
-            // queryName?
+            // Is the name provided by the field unique or the same as the current queryName?
             if (getDevice(id).getQueryName().equals(queryName.toString()) || isAUniqueQueryName(queryName.toString())) {
                 return queryName.toString();
             } else {
