@@ -52,6 +52,18 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CouldNotFindUniqueQueryNameException.class)
+    public ResponseEntity<Object> handleCouldnotFindUniqueQueryNameException(CouldNotFindUniqueQueryNameException exception, WebRequest request) {
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("self",    LinkBuilder.getDeviceLink(exception.getId()).toString());
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+
+        return HttpResponseBuilder.buildException(
+                exception.getMessage(),
+                linkBlock,
+                HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(BatchQueryNameException.class)
     public ResponseEntity<Object> handleBatchQueryNameException(BatchQueryNameException exception, WebRequest request) {
         Map<String, String> linkBlock = new HashMap<>();

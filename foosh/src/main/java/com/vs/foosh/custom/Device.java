@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vs.foosh.api.model.AbstractDevice;
+import com.vs.foosh.api.model.DeviceList;
+import com.vs.foosh.api.model.QueryNamePatchRequest;
 import com.vs.foosh.api.services.LinkBuilder;
 
 public class Device extends AbstractDevice {
@@ -15,8 +17,7 @@ public class Device extends AbstractDevice {
         this.description = new DeviceDescription(description);
         setObjectFields();
 
-        //TODO: Set unique queryName
-        setQueryName(this.description.getProperties().get("name").toString());
+        setQueryName(DeviceList.findUniqueQueryName(new QueryNamePatchRequest(this.id.toString(), this.description.getProperties().get("name").toString())));
 
         this.links = new HashMap<>();
         this.links.put("selfStatic", LinkBuilder.buildPath(List.of("device", this.id.toString())).toString());
