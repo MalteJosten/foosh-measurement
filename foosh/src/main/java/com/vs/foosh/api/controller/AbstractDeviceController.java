@@ -13,6 +13,7 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -150,6 +151,13 @@ public abstract class AbstractDeviceController {
             throw new QueryNameIsNullException(id, requestBody);
         }
         
+        // Is the provided id a valid UUID?
+        try {
+            id = UUID.fromString(id).toString();
+        } catch (IllegalArgumentException e) {
+            throw new IdIsNoValidUUIDException(id);
+        }
+        
         if (patchDeviceQueryName(new QueryNamePatchRequest(id, queryName))) {
             return new ResponseEntity<>(DeviceList.getDevice(id), HttpStatus.OK);
         } else {
@@ -184,12 +192,19 @@ public abstract class AbstractDeviceController {
     }
 
     private boolean patchBatchDeviceQueryName(List<QueryNamePatchRequest> batchRequest) {
-        List<AbstractDevice> olddDeviceList = DeviceList.getInstance();
+        List<AbstractDevice> oldDeviceList = DeviceList.getInstance();
 
         for(QueryNamePatchRequest request: batchRequest) {
+            // Is the provided id a valid UUID?
+            try {
+                UUID test = UUID.fromString(request.getId());
+            } catch (IllegalArgumentException e) {
+                throw new IdIsNoValidUUIDException(request.getId());
+            }
+
             if (!patchDeviceQueryName(request)) {
                 DeviceList.clearDevices();
-                DeviceList.setDevices(olddDeviceList);
+                DeviceList.setDevices(oldDeviceList);
                 return false;
             } 
         }

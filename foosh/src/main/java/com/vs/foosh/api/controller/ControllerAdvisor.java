@@ -64,8 +64,20 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    
     @ExceptionHandler(BatchQueryNameException.class)
     public ResponseEntity<Object> handleBatchQueryNameException(BatchQueryNameException exception, WebRequest request) {
+        Map<String, String> linkBlock = new HashMap<>();
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+
+        return HttpResponseBuilder.buildException(
+                exception.getMessage(),
+                linkBlock,
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IdIsNoValidUUIDException.class)
+    public ResponseEntity<Object> handleIdIsnoValidUUIDException(IdIsNoValidUUIDException exception, WebRequest request) {
         Map<String, String> linkBlock = new HashMap<>();
         linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
 
