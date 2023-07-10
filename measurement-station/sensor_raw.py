@@ -8,10 +8,8 @@ from network import WLAN, STA_IF
 import secrets
 
 
-# Number of probes which are used to return an averaged value.
-PROBES = 10
 # Number of seconds to wait before starting with the next measurement cycle.
-INTERVAL = 15
+INTERVAL = 60
 # URL to which the POST-Request is sent to.
 REQUEST_URL = "http://192.168.108.103:3000/add"
 # Number of seconds to wait for the network connection to be established.
@@ -73,18 +71,6 @@ class LightSensor():
 
         return light
 
-    def map_range(self, x, in_min, in_max, out_min, out_max):
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-
-
-def average(list):
-    sum = 0
-    for x in list:
-        sum += x
-
-    avg = sum / len(list)
-
-    return avg
 
 
 ls = LightSensor(28)
@@ -96,10 +82,7 @@ while not(ls.has_connection):
 
 # Start measuremnt loop.
 while True:
-    readings = []
-    for i in range(0, PROBES):
-        readings.append(ls.read_light())
-        sleep(1)
-
-    ls.send(average(readings))
+    print("now")
+    reading = ls.read_light()
+    #ls.send(reading)
     sleep(INTERVAL)

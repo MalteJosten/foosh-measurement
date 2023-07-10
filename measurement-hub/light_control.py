@@ -3,6 +3,9 @@ import time
 from datetime import datetime
 import random
 
+# Number of seconds between switching on/off lamp
+INTERVAL = 300
+
 
 class LightControl:
     api_point = "localhost:8080"
@@ -34,5 +37,5 @@ lc = LightControl()
 lc.turnOnOff(False)
 
 while (True):
-    time.sleep(5)
+    time.sleep(INTERVAL)
     lc.chooseBehavior()
