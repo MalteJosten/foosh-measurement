@@ -53,6 +53,18 @@ public class LinkBuilder {
         return uri.toUri();
     }
 
+    public static URI getVariableListLink() {
+        UriComponents uri = UriComponentsBuilder
+            .newInstance()
+            .scheme("http")
+            .host(host)
+            .port(port)
+            .path("variables")
+            .build();
+
+        return uri.toUri();
+    }
+
     public static Map<String, Object> getJSONLinkBlock(Map<String, String> linkMapping) {
         Map<String, Object> linkBlock = new HashMap<>();
 
