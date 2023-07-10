@@ -8,10 +8,10 @@ import java.util.Map;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+
 public class LinkBuilder {
-    //TODO: Read in variables from config file
-    private static final String host = "localhost";
-    private static final int port = 8080;
+    private static String host;
+    private static int port;
 
     public static URI buildPath(List<String> paths) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
@@ -61,5 +61,10 @@ public class LinkBuilder {
         }
 
         return linkBlock;
+    }
+
+    public static void setServerVariables(String pHost, int pPort) {
+        host = pHost;
+        port = pPort;
     }
 }

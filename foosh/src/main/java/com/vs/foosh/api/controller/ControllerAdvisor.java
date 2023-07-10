@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.vs.foosh.api.exceptions.*;
 import com.vs.foosh.api.services.LinkBuilder;
+import com.vs.foosh.api.exceptions.*;
 import com.vs.foosh.api.services.HttpResponseBuilder;
 
 @ControllerAdvice
