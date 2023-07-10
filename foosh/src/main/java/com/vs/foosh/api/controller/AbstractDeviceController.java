@@ -14,37 +14,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import com.vs.foosh.api.model.AbstractSmartHomeCredentials;
+import com.vs.foosh.api.model.SmartHomeCredentials;
 import com.vs.foosh.api.exceptions.*;
 import com.vs.foosh.api.model.AbstractDevice;
 import com.vs.foosh.api.model.DeviceList;
 import com.vs.foosh.api.model.FetchDeviceResponse;
 import com.vs.foosh.api.model.QueryNamePatchRequest;
 import com.vs.foosh.api.services.LinkBuilder;
+import com.vs.foosh.api.services.ApplicationConfig;
 import com.vs.foosh.api.services.HttpResponseBuilder;
-import com.vs.foosh.custom.SmartHomeCredentials;
 
 public abstract class AbstractDeviceController {
-
-    protected SmartHomeCredentials smartHomeCredentials = new SmartHomeCredentials();
 
     //
     // Device Collection
     //
-
-    @Bean
-    CommandLineRunner initDevices() {
-        return args -> {
-            smartHomeCredentials.loadSmartHomeCredentials();
-        };
-    }
 
     @GetMapping(value = "/devices", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> devicesGet() {
@@ -59,7 +48,7 @@ public abstract class AbstractDeviceController {
 
     @PostMapping(value = "/devices", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> devicesPost(
-            @RequestBody(required = false) AbstractSmartHomeCredentials credentials) {
+            @RequestBody(required = false) SmartHomeCredentials credentials) {
         FetchDeviceResponse apiResponse;
 
         try {
@@ -79,9 +68,9 @@ public abstract class AbstractDeviceController {
                     linkBlock,
                     HttpStatus.OK);
         } catch (ResourceAccessException rAccessException) {
-            throw new SmartHomeAccessException(smartHomeCredentials.getUri() + "/devices");
+            throw new SmartHomeAccessException(ApplicationConfig.getSmartHomeCredentials().getUri() + "/devices");
         } catch (IOException ioException) {
-            throw new SmartHomeIOException(smartHomeCredentials.getUri() + "/devices");
+            throw new SmartHomeIOException(ApplicationConfig.getSmartHomeCredentials().getUri() + "/devices");
         }
     }
 
@@ -123,7 +112,7 @@ public abstract class AbstractDeviceController {
 
     protected abstract FetchDeviceResponse fetchDevicesFromSmartHomeAPI() throws ResourceAccessException, IOException;
 
-    protected abstract FetchDeviceResponse fetchDevicesFromSmartHomeAPI(AbstractSmartHomeCredentials credentials)
+    protected abstract FetchDeviceResponse fetchDevicesFromSmartHomeAPI(SmartHomeCredentials credentials)
             throws ResourceAccessException, IOException;
 
     //
@@ -184,9 +173,8 @@ public abstract class AbstractDeviceController {
             throw new QueryNameIsEmptyException(request);
         }
 
-        // Is the name provided by the field unique or the same as the current
-        // queryName?
-        if (DeviceList.getDevice(id).getQueryName().equals(queryName) || DeviceList.isAUniqueQueryName(queryName)) {
+        // Is the name provided by the field unique?
+        if (DeviceList.isAUniqueQueryName(queryName, id)) {
             DeviceList.getDevice(id).setQueryName(queryName);
 
             return true;

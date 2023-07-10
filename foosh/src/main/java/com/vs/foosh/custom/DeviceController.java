@@ -13,8 +13,9 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vs.foosh.api.controller.AbstractDeviceController;
 import com.vs.foosh.api.model.AbstractDevice;
-import com.vs.foosh.api.model.AbstractSmartHomeCredentials;
+import com.vs.foosh.api.model.SmartHomeCredentials;
 import com.vs.foosh.api.model.FetchDeviceResponse;
+import com.vs.foosh.api.services.ApplicationConfig;
 
 @RestController
 public class DeviceController extends AbstractDeviceController {
@@ -24,7 +25,7 @@ public class DeviceController extends AbstractDeviceController {
         RestTemplate restTemplate = new RestTemplateBuilder().setConnectTimeout(Duration.ofSeconds(5)).setReadTimeout(Duration.ofSeconds(5)).build();
         List<AbstractDevice> devices = new ArrayList<>();
 
-        JsonNode response = restTemplate.getForObject(smartHomeCredentials.getUri() + "rest/items", JsonNode.class);
+        JsonNode response = restTemplate.getForObject(ApplicationConfig.getSmartHomeCredentials().getUri() + "rest/items", JsonNode.class);
 
         for (JsonNode node : response) {
             if (!node.get("state").asText().equals("NULL")) {
@@ -38,7 +39,7 @@ public class DeviceController extends AbstractDeviceController {
 
     /// For this scenario, no authentication is needed.
     @Override
-    protected FetchDeviceResponse fetchDevicesFromSmartHomeAPI(AbstractSmartHomeCredentials credentials) throws ResourceAccessException, IOException {
+    protected FetchDeviceResponse fetchDevicesFromSmartHomeAPI(SmartHomeCredentials credentials) throws ResourceAccessException, IOException {
         throw new UnsupportedOperationException("Unimplemented method 'fetchDevicesFromSmartHomeAPI'");
     }
     

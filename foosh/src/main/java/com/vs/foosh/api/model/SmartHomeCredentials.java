@@ -2,19 +2,17 @@ package com.vs.foosh.api.model;
 
 import java.util.HashMap;
 
-public abstract class AbstractSmartHomeCredentials {
+public class SmartHomeCredentials {
 
-    protected String uri;
-    protected HashMap<String, String> credentials;
+    private String uri;
+    private HashMap<String, String> credentials;
 
-    public AbstractSmartHomeCredentials() {}
+    public SmartHomeCredentials() {}
 
-    public AbstractSmartHomeCredentials(HashMap<String, String> credentials) {
+    public SmartHomeCredentials(String uri, HashMap<String, String> credentials) {
         setUri(uri);
         setCredentials(credentials);
     }
-
-    public abstract void loadSmartHomeCredentials();
 
     public void setUri(String uri) {
         this.uri = uri;

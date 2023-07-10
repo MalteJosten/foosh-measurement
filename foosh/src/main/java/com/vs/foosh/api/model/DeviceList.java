@@ -2,6 +2,7 @@ package com.vs.foosh.api.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.vs.foosh.api.exceptions.CouldNotFindUniqueQueryNameException;
 import com.vs.foosh.api.exceptions.DeviceIdNotFoundException;
@@ -28,7 +29,7 @@ public class DeviceList {
     }
 
     public void pushDevice(AbstractDevice device) {
-        if (isAUniqueQueryName(device.getQueryName())) {
+        if (isAUniqueQueryName(device.getQueryName(), device.getId().toString())) {
             getInstance().add(device);
         } else {
             throw new QueryNameIsNotUniqueException(new QueryNamePatchRequest(device.getId().toString(), device.getQueryName()));
@@ -58,9 +59,15 @@ public class DeviceList {
         throw new DeviceIdNotFoundException(id);
     }
 
-    public static boolean isAUniqueQueryName(String name) {
+    public static boolean isAUniqueQueryName(String name, String id) {
         for (AbstractDevice d: getInstance()) {
+            // Check whether the queryName 'name' is already used.
             if (d.getQueryName().equals(name)) {
+                // If it's already used, check whether it's the same device.
+                if (d.getId() == UUID.fromString(id)) {
+                    return true;
+                }
+
                 return false;
             }
         }
@@ -75,7 +82,7 @@ public class DeviceList {
     ///
     public static String findUniqueQueryName(QueryNamePatchRequest request) {
         StringBuilder queryName = new StringBuilder(request.getQueryName());
-        String id = request.getId();
+        String id = request.getId().toString();
 
         // Does the field contain any letters, i.e., is it not empty?
         if (queryName.toString().trim().isEmpty()) {
@@ -84,7 +91,7 @@ public class DeviceList {
 
         for (int i = 0; i < UNIQUE_QUERY_NAME_TIMEOUT; i++) {
             // Is the name provided by the field unique or the same as the current queryName?
-            if (getDevice(id).getQueryName().equals(queryName.toString()) || isAUniqueQueryName(queryName.toString())) {
+            if (isAUniqueQueryName(queryName.toString(), id)) {
                 return queryName.toString();
             } else {
                 queryName.replace(0, queryName.length(), getDevice(id).getDeviceName() + (i+1));
