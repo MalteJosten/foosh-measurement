@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const DataPointSchema = new mongoose.Schema({
-    timestamp: { type: Date,   default: Date.now() },
+    timestamp: { type: Date,   default: Date.UTC(Date.now()) },
     value    : { type: Number, required: true },
     items    : [{
                 link: {
