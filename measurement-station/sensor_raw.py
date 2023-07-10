@@ -84,5 +84,5 @@ while not(ls.has_connection):
 while True:
     print("now")
     reading = ls.read_light()
-    #ls.send(reading)
+    ls.send(reading)
     sleep(INTERVAL)
