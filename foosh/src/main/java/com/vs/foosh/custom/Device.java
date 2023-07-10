@@ -30,9 +30,7 @@ public class Device extends AbstractDevice {
         this.description = new DeviceDescription(description);
         setObjectFields();
 
-        //TODO: Set unique queryName
-        setQueryName(queryName);
-        this.deviceName = this.description.getProperties().get("name").toString();
+        setQueryName(DeviceList.findUniqueQueryName(new QueryNamePatchRequest(this.id.toString(), queryName)));
 
         this.links = new HashMap<>();
         this.links.put("selfStatic", LinkBuilder.buildPath(List.of("device", this.id.toString())).toString());
