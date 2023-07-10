@@ -153,7 +153,7 @@ public abstract class AbstractDeviceController {
         
         // Is the provided id a valid UUID?
         try {
-            id = UUID.fromString(id).toString();
+            UUID.fromString(id).toString();
         } catch (IllegalArgumentException e) {
             throw new IdIsNoValidUUIDException(id);
         }
@@ -197,7 +197,7 @@ public abstract class AbstractDeviceController {
         for(QueryNamePatchRequest request: batchRequest) {
             // Is the provided id a valid UUID?
             try {
-                UUID test = UUID.fromString(request.getId());
+                UUID.fromString(request.getId());
             } catch (IllegalArgumentException e) {
                 throw new IdIsNoValidUUIDException(request.getId());
             }

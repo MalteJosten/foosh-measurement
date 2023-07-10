@@ -84,7 +84,6 @@ public class ApplicationConfig {
                 ObjectMapper mapper = new ObjectMapper();
 
                 smartHomeCredentials = mapper.readValue(jsonData, SmartHomeCredentials.class);
-                System.out.println(smartHomeCredentials);
             } catch (IOException e) {
                 System.err.println("Something went wrong while reading secrets.json:\n" + e);
             }
