@@ -11,7 +11,7 @@ function addDataPoint(req, res) {
     openHab.getItems()
         .then((items) => {
             let data = new DataPoint({
-                timestamp: Date.now(),
+                timestamp: constructTimestamp(),
                 value    : req.body.value,
                 items    : items
             });

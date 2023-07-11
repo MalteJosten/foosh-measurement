@@ -40,7 +40,7 @@ const DataPointSchema = new mongoose.Schema({
                 }]
     }]
     },{
-        collection: "run2"
+        collection: "test_2023-07-11"
     }
 );
 
