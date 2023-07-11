@@ -11,7 +11,7 @@ function addDataPoint(req, res) {
     openHab.getItems()
         .then((items) => {
             let data = new DataPoint({
-                timestamp: constructTimestamp(),
+                timestamp: new Date(),
                 value    : req.body.value,
                 items    : items
             });
@@ -20,22 +20,6 @@ function addDataPoint(req, res) {
             res.status(200).send({ msg: "Saved data point" });
 
         });
-}
-
-function constructTimestamp() {
-    const now = new Date();
-
-    const month = now.getMonth() + 1;
-    const date  = now.getFullYear() + "-" + ("0" + month).slice(-2) + "-" + now.getDate();
-
-    const hours   = now.getHours();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
-    const time = ("0" + hours).slice(-2) + ":" +
-        ("0" + minutes).slice(-2) + ":" +
-        ("0" + seconds).slice(-2)
-
-    return date + " " + time;
 }
 
 module.exports = router;

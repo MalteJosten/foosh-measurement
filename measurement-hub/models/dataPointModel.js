@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const DataPointSchema = new mongoose.Schema({
-    timestamp: { type: Date,   default: new Date() },
+    timestamp: { type: Date, required: true },
     value    : { type: Number, required: true },
     items    : [{
                 link: {
@@ -43,5 +43,6 @@ const DataPointSchema = new mongoose.Schema({
         collection: "test_2023-07-11"
     }
 );
+
 
 module.exports = mongoose.model('DataPoint', DataPointSchema);
