@@ -4,7 +4,7 @@ from datetime import datetime
 import random
 
 # Number of seconds between switching on/off lamp
-INTERVAL = 300
+INTERVAL = 120
 
 
 class LightControl:
