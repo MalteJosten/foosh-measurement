@@ -72,7 +72,6 @@ class LightSensor():
         return light
 
 
-
 ls = LightSensor(28)
 ls.connect()
 
