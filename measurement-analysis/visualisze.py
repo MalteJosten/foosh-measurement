@@ -10,7 +10,7 @@ sns.set(style="ticks")
 def connect():
     client = MongoClient(uri, server_api=ServerApi("1"))
     db = client.brightness
-    collection = db.run2
+    collection = db["test_2023-07-11"]
 
     raw = list(collection.find({}))
     
@@ -27,10 +27,10 @@ def connect():
     
     df = pd.DataFrame(data)
 
-    print(df)
+    color_palette = { "ON": "C1", "OFF": "C0" }
     
-    scatter = sns.scatterplot(data=df, x="Time", y="Brightness", hue="State")
+    scatter = sns.scatterplot(data=df, x="Time", y="Brightness", hue="State", palette=color_palette)
     plt.show()
-    scatter.fig.savefig("out2.png")
+    scatter.get_figure().savefig("out3.png")
 
 connect()
