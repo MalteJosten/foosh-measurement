@@ -37,7 +37,8 @@ public class ApplicationConfig {
         } catch (IOException e) {
             port = DEFAULT_PORT;
             System.out.println(
-                    "Encountered a problem reading application.properties!\nUsing default port: "
+                    "[INFO] Encountered a problem reading application.properties!\n"
+                            + "[INFO] Using default port: "
                             + DEFAULT_PORT);
         } finally {
             LinkBuilder.setServerVariables(HOST, port);
@@ -48,20 +49,24 @@ public class ApplicationConfig {
         if (serverPort == null || serverPort.equals("")) {
             port = DEFAULT_PORT;
             System.out.println(
-                    "Field 'server.port' (" + serverPort
-                            + ") in application.properties is either empty or non-existent!\nUsing default port: "
+                    "[INFO] Field 'server.port' (" + serverPort
+                            + ") in application.properties is either empty or non-existent!\n"
+                            + "[INFO] Using default port: "
                             + DEFAULT_PORT);
             return;
         }
 
         try {
             port = Integer.parseInt(serverPort);
-            System.out.println("Successfully read application.properties!\nUsing port: " + port);
+            System.out.println(
+                    "[INFO] Successfully read application.properties!\n"
+                            + "[INFO] Using port: " + port);
         } catch (NumberFormatException e) {
             port = DEFAULT_PORT;
             System.out.println(
-                    "Field 'server.port' (" + serverPort
-                            + ") in application.properties cannot be converted to an Integer!\nUsing default port: "
+                    "[INFO] Field 'server.port' (" + serverPort
+                            + ") in application.properties cannot be converted to an Integer!\n"
+                            + "[INFO] Using default port: "
                             + DEFAULT_PORT);
         } finally {
             LinkBuilder.setServerVariables(HOST, port);
@@ -71,9 +76,9 @@ public class ApplicationConfig {
     private static void setupSmartHomeCredentials(String path) {
         if (path == null || path.equals("")) {
             System.err.println(
-                    "Field 'smartHomeCredentialsPath' (" + path
+                    "[ERROR] Field 'smartHomeCredentialsPath' (" + path
                             + ") in application.properties is either empty or non-existent! This might become a problem when trying to communicate with the SmartHome API.\n"
-                            + "Please set a correct path and restart the server!");
+                            + "[ADVICE] Please set a correct path and restart the server!");
             return;
         }
 
@@ -85,7 +90,7 @@ public class ApplicationConfig {
 
                 smartHomeCredentials = mapper.readValue(jsonData, SmartHomeCredentials.class);
             } catch (IOException e) {
-                System.err.println("Something went wrong while reading secrets.json:\n" + e);
+                System.err.println("[ERROR] Something went wrong while reading secrets.json:\n" + e);
             }
         }
     }
