@@ -7,6 +7,12 @@ from creds import uri
 
 sns.set(style="ticks")
 
+def calc(x):
+    resistance = (x / 65_535) * 33_000
+    lux = 1.25 * resistance
+
+    return lux
+
 def connect():
     client = MongoClient(uri, server_api=ServerApi("1"))
     db = client.brightness
@@ -22,7 +28,7 @@ def connect():
 
     for datapoint in raw:
         data["Time"].append(datapoint["timestamp"])
-        data["Brightness"].append(datapoint["value"])
+        data["Brightness"].append(calc(datapoint["value"]))
         data["State"].append(datapoint["items"][0]["state"])
     
     df = pd.DataFrame(data)
@@ -31,6 +37,6 @@ def connect():
     
     scatter = sns.scatterplot(data=df, x="Time", y="Brightness", hue="State", palette=color_palette)
     plt.show()
-    scatter.get_figure().savefig("out4.png")
+    scatter.get_figure().savefig("lux.png")
 
 connect()
