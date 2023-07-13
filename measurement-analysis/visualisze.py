@@ -31,6 +31,6 @@ def connect():
     
     scatter = sns.scatterplot(data=df, x="Time", y="Brightness", hue="State", palette=color_palette)
     plt.show()
-    scatter.get_figure().savefig("out3.png")
+    scatter.get_figure().savefig("out4.png")
 
 connect()
