@@ -38,9 +38,10 @@ public class DeviceController extends AbstractDeviceController {
     }
 
     /// For this scenario, no authentication is needed.
+    /// Therefore we ignore any input and just forward the request to the non-credential-using method.
     @Override
     protected FetchDeviceResponse fetchDevicesFromSmartHomeAPI(SmartHomeCredentials credentials) throws ResourceAccessException, IOException {
-        throw new UnsupportedOperationException("Unimplemented method 'fetchDevicesFromSmartHomeAPI'");
+        return fetchDevicesFromSmartHomeAPI();
     }
     
 }
