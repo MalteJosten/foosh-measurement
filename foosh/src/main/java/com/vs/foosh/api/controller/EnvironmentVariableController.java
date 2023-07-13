@@ -18,7 +18,7 @@ import com.vs.foosh.api.services.HttpResponseBuilder;
 import com.vs.foosh.api.services.LinkBuilder;
 
 @RestController
-public abstract class AbstractEnvironmentVariableController {
+public abstract class EnvironmentVariableController {
 
     ///
     /// Environment Variables
