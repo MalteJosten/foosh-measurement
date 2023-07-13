@@ -1,9 +1,11 @@
 package com.vs.foosh.api.services;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -40,14 +42,24 @@ public class LinkBuilder {
         return uri.toUri();
     }
 
-    public static URI getDeviceLink(String id) {
+    public static List<URI> getDeviceBatchLink(List<UUID> deviceIDs) {
+        List<URI> uris = new ArrayList<>();
+
+        for(UUID deviceID: deviceIDs) {
+           uris.add(getDeviceLink(deviceID));
+        }
+
+        return uris;
+    }
+
+    public static URI getDeviceLink(UUID id) {
         UriComponents uri = UriComponentsBuilder
             .newInstance()
             .scheme("http")
             .host(host)
             .port(port)
             .path("device/")
-            .path(id)
+            .path(id.toString())
             .build();
 
         return uri.toUri();
@@ -60,6 +72,42 @@ public class LinkBuilder {
             .host(host)
             .port(port)
             .path("variables")
+            .build();
+
+        return uri.toUri();
+    }
+
+    public static URI getVariableLink(UUID id) {
+        UriComponents uri = UriComponentsBuilder
+            .newInstance()
+            .scheme("http")
+            .host(host)
+            .port(port)
+            .path("var/")
+            .path(id.toString())
+            .build();
+
+        return uri.toUri();
+    }
+
+    public static List<URI> getModelBatchLink(List<UUID> modelIDs) {
+        List<URI> uris = new ArrayList<>();
+
+        for(UUID modelID: modelIDs) {
+           uris.add(getModelLink(modelID));
+        }
+
+        return uris;
+    }
+
+    public static URI getModelLink(UUID id) {
+        UriComponents uri = UriComponentsBuilder
+            .newInstance()
+            .scheme("http")
+            .host(host)
+            .port(port)
+            .path("model/")
+            .path(id.toString())
             .build();
 
         return uri.toUri();
