@@ -1,12 +1,23 @@
 package com.vs.foosh.api.exceptions;
 
+import java.util.UUID;
+
 public class DeviceIdNotFoundException extends RuntimeException {
-    private String id;
+    private String message;
 
     public DeviceIdNotFoundException(String id) {
-        super("Could not find device with id '" + id + "' !");
-        this.id = id;
+        super();
+
+        try {
+            UUID uniqueId = UUID.fromString(id);
+            this.message = "Could not find device with id '" + uniqueId + "'!";
+        } catch (IllegalArgumentException e) {
+            this.message = "Could not find device with queryName '" + id + "'!";
+        }
     }
 
-    public String getId() { return this.id; }
+    @Override
+    public String getMessage() {
+        return this.message;
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +39,8 @@ public abstract class AbstractDeviceController {
 
     @GetMapping(value = "/devices", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> devicesGet() {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("self", LinkBuilder.getDeviceListLink());
 
         return HttpResponseBuilder.buildResponse(
                 new AbstractMap.SimpleEntry<String, Object>("devices", DeviceList.getDevices()),
@@ -47,6 +48,7 @@ public abstract class AbstractDeviceController {
                 HttpStatus.OK);
     }
 
+    // TODO: [BUG] After calling a second time, it gets weird. Look into it!
     @PostMapping(value = "/devices", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> devicesPost(
             @RequestBody(required = false) SmartHomeCredentials credentials) {
@@ -54,15 +56,17 @@ public abstract class AbstractDeviceController {
 
         try {
             if (credentials == null) {
+                System.out.println("null");
                 apiResponse = fetchDevicesFromSmartHomeAPI();
             } else {
+                System.out.println("non null");
                 apiResponse = fetchDevicesFromSmartHomeAPI(credentials);
             }
 
             DeviceList.setDevices(apiResponse.getDevices());
 
-            Map<String, String> linkBlock = new HashMap<>();
-            linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
+            Map<String, URI> linkBlock = new HashMap<>();
+            linkBlock.put("self", LinkBuilder.getDeviceListLink());
 
             return HttpResponseBuilder.buildResponse(
                     new AbstractMap.SimpleEntry<String, Object>("devices", DeviceList.getDevices()),
@@ -79,14 +83,14 @@ public abstract class AbstractDeviceController {
     public ResponseEntity<Object> devicesPut() {
         throw new HttpMappingNotImplementedException(
                 "You can only update the devices list with POST!",
-                Map.of("self", LinkBuilder.getDeviceListLink().toString()));
+                Map.of("self", LinkBuilder.getDeviceListLink()));
     }
 
     @PatchMapping("/devices")
     public ResponseEntity<Object> devicesPatch(@RequestBody List<QueryNamePatchRequest> request) {
         if (patchBatchDeviceQueryName(request)) {
-            Map<String, String> linkBlock = new HashMap<>();
-            linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
+            Map<String, URI> linkBlock = new HashMap<>();
+            linkBlock.put("self", LinkBuilder.getDeviceListLink());
 
             return HttpResponseBuilder.buildResponse(
                     new AbstractMap.SimpleEntry<String, Object>("devices", DeviceList.getDevices()),
@@ -101,8 +105,8 @@ public abstract class AbstractDeviceController {
     public ResponseEntity<Object> devicesDelete() {
         DeviceList.clearDevices();
 
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("self", LinkBuilder.getDeviceListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("self", LinkBuilder.getDeviceListLink());
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("devices", DeviceList.getDevices());
@@ -131,35 +135,37 @@ public abstract class AbstractDeviceController {
     public ResponseEntity<Object> devicePost(@PathVariable("id") String id) {
         throw new HttpMappingNotImplementedException(
                 "You can only create/replace a device with either POST or PATCH on /devices !",
-                Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
+                Map.of("devices", LinkBuilder.getDeviceListLink()));
     }
 
     @PutMapping("/device/{id}")
     public ResponseEntity<Object> devicePut(@PathVariable("id") String id) {
         throw new HttpMappingNotImplementedException(
                 "You can only create/replace a device with either POST or PATCH on /devices !",
-                Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
+                Map.of("devices", LinkBuilder.getDeviceListLink()));
     }
 
     /// no empty string
     @PatchMapping("/device/{id}")
     public ResponseEntity<Object> devicePatch(@PathVariable("id") String id, @RequestBody Map<String, String> requestBody) {
         String queryName = requestBody.get("queryName");
+        UUID uuid;
 
-        // Is a field called 'queryName'?
-        if (queryName == null) {
-            throw new QueryNameIsNullException(id, requestBody);
-        }
-        
         // Is the provided id a valid UUID?
         try {
-            UUID.fromString(id).toString();
+            uuid = UUID.fromString(id);
         } catch (IllegalArgumentException e) {
             throw new IdIsNoValidUUIDException(id);
         }
+
+        // Is a field called 'queryName'?
+        if (queryName == null) {
+            throw new QueryNameIsNullException(uuid, requestBody);
+        }
         
-        if (patchDeviceQueryName(new QueryNamePatchRequest(id, queryName))) {
-            return new ResponseEntity<>(DeviceList.getDevice(id), HttpStatus.OK);
+        
+        if (patchDeviceQueryName(new QueryNamePatchRequest(uuid, queryName))) {
+            return new ResponseEntity<>(DeviceList.getDevice(uuid.toString()), HttpStatus.OK);
         } else {
             return new ResponseEntity<Object>("Could not patch queryName for device '" + id + "' !'", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -169,12 +175,12 @@ public abstract class AbstractDeviceController {
     public ResponseEntity<Object> deviceDelete(@PathVariable("id") String id) {
         throw new HttpMappingNotImplementedException(
                 "You cannot delete an individual device. You can only delete the entire collection with DELETE on /devices !",
-                Map.of("devices", LinkBuilder.getDeviceListLink().toString()));
+                Map.of("devices", LinkBuilder.getDeviceListLink()));
     }
 
     private boolean patchDeviceQueryName(QueryNamePatchRequest request) {
         String queryName = request.getQueryName();
-        String id = request.getId();
+        UUID id = request.getId();
 
         // Does the field contain any letters, i.e., is it not empty?
         if (queryName.trim().isEmpty()) {
@@ -183,7 +189,7 @@ public abstract class AbstractDeviceController {
 
         // Is the name provided by the field unique?
         if (DeviceList.isAUniqueQueryName(queryName, id)) {
-            DeviceList.getDevice(id).setQueryName(queryName);
+            DeviceList.getDevice(id.toString()).setQueryName(queryName);
 
             return true;
         } else {
@@ -195,13 +201,6 @@ public abstract class AbstractDeviceController {
         List<AbstractDevice> oldDeviceList = DeviceList.getInstance();
 
         for(QueryNamePatchRequest request: batchRequest) {
-            // Is the provided id a valid UUID?
-            try {
-                UUID.fromString(request.getId());
-            } catch (IllegalArgumentException e) {
-                throw new IdIsNoValidUUIDException(request.getId());
-            }
-
             if (!patchDeviceQueryName(request)) {
                 DeviceList.clearDevices();
                 DeviceList.setDevices(oldDeviceList);

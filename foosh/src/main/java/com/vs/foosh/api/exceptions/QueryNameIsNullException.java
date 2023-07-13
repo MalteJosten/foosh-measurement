@@ -1,16 +1,17 @@
 package com.vs.foosh.api.exceptions;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class QueryNameIsNullException extends RuntimeException {
-    private String id;
+    private UUID id;
    
-    public QueryNameIsNullException(String id, Map<String, String> requestBody) {
+    public QueryNameIsNullException(UUID id, Map<String, String> requestBody) {
         super("The provided request body " + requestBody.toString() + " does not contain a field named 'queryName'!");
         this.id = id;
     }
 
-    public String getId() {
+    public UUID getId() {
         return this.id;
     }
 }

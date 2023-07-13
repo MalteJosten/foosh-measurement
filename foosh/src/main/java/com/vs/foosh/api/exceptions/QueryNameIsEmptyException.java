@@ -1,5 +1,7 @@
 package com.vs.foosh.api.exceptions;
 
+import java.util.UUID;
+
 import com.vs.foosh.api.model.QueryNamePatchRequest;
 
 public class QueryNameIsEmptyException extends RuntimeException {
@@ -10,7 +12,7 @@ public class QueryNameIsEmptyException extends RuntimeException {
         this.request = request;
     }
 
-    public String getId() {
+    public UUID getId() {
         return this.request.getId();
     }
 }

@@ -17,7 +17,7 @@ public class Device extends AbstractDevice {
         this.description = new DeviceDescription(description);
         setObjectFields();
 
-        setQueryName(DeviceList.findUniqueQueryName(new QueryNamePatchRequest(this.id.toString(), this.description.getProperties().get("name").toString())));
+        setQueryName(DeviceList.findUniqueQueryName(new QueryNamePatchRequest(this.id, this.description.getProperties().get("name").toString())));
 
         this.links = new HashMap<>();
         this.links.put("selfStatic", LinkBuilder.buildPath(List.of("device", this.id.toString())).toString());
@@ -30,7 +30,7 @@ public class Device extends AbstractDevice {
         this.description = new DeviceDescription(description);
         setObjectFields();
 
-        setQueryName(DeviceList.findUniqueQueryName(new QueryNamePatchRequest(this.id.toString(), queryName)));
+        setQueryName(DeviceList.findUniqueQueryName(new QueryNamePatchRequest(this.id, queryName)));
 
         this.links = new HashMap<>();
         this.links.put("selfStatic", LinkBuilder.buildPath(List.of("device", this.id.toString())).toString());

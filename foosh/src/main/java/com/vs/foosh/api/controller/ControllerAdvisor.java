@@ -1,7 +1,9 @@
 package com.vs.foosh.api.controller;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +26,9 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(QueryNameIsNotUniqueException.class)
     public ResponseEntity<Object> handleQueryNameIsNotUniqueException(QueryNameIsNotUniqueException exception,
             WebRequest request) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("self", LinkBuilder.getDeviceLink(exception.getId()).toString());
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("self", LinkBuilder.getDeviceLink(exception.getId()));
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink());
 
         return HttpResponseBuilder.buildException(
                 exception.getMessage(),
@@ -37,9 +39,9 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(QueryNameIsNullException.class)
     public ResponseEntity<Object> handleQueryNameIsNullException(QueryNameIsNullException exception,
             WebRequest request) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("self", LinkBuilder.getDeviceLink(exception.getId()).toString());
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("self", LinkBuilder.getDeviceLink(exception.getId()));
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink());
 
         return HttpResponseBuilder.buildException(
                 exception.getMessage(),
@@ -50,9 +52,9 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(QueryNameIsEmptyException.class)
     public ResponseEntity<Object> handleQueryNameIsEmptyException(QueryNameIsEmptyException exception,
             WebRequest request) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("self", LinkBuilder.getDeviceLink(exception.getId()).toString());
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("self", LinkBuilder.getDeviceLink(exception.getId()));
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink());
 
         return HttpResponseBuilder.buildException(
                 exception.getMessage(),
@@ -63,9 +65,9 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CouldNotFindUniqueQueryNameException.class)
     public ResponseEntity<Object> handleCouldNotFindUniqueQueryNameException(
             CouldNotFindUniqueQueryNameException exception, WebRequest request) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("self", LinkBuilder.getDeviceLink(exception.getId()).toString());
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("self", LinkBuilder.getDeviceLink(exception.getId()));
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink());
 
         return HttpResponseBuilder.buildException(
                 exception.getMessage(),
@@ -75,8 +77,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BatchQueryNameException.class)
     public ResponseEntity<Object> handleBatchQueryNameException(BatchQueryNameException exception, WebRequest request) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink());
 
         return HttpResponseBuilder.buildException(
                 exception.getMessage(),
@@ -87,8 +89,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DeviceIdNotFoundException.class)
     public ResponseEntity<Object> handleDeviceIdNotFoundException(DeviceIdNotFoundException exception,
             WebRequest request) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink());
 
         return HttpResponseBuilder.buildException(
                 exception.getMessage(),
@@ -103,8 +105,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EnvironmentalVariableNotFoundException.class)
     public ResponseEntity<Object> handleEnvironmentalVariableNotFoundException(
             EnvironmentalVariableNotFoundException exception, WebRequest request) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("variables", LinkBuilder.getVariableListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("variables", LinkBuilder.getVariableListLink());
 
         return HttpResponseBuilder.buildException(
                 exception.getMessage(),
@@ -120,8 +122,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(IdIsNoValidUUIDException.class)
     public ResponseEntity<Object> handleIdIsnoValidUUIDException(IdIsNoValidUUIDException exception,
             WebRequest request) {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("devices", LinkBuilder.getDeviceListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("devices", LinkBuilder.getDeviceListLink());
 
         return HttpResponseBuilder.buildException(
                 exception.getMessage(),

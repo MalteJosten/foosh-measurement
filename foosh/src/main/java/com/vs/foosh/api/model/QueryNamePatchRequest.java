@@ -1,15 +1,17 @@
 package com.vs.foosh.api.model;
 
+import java.util.UUID;
+
 public class QueryNamePatchRequest {
-    private String id;
+    private UUID id;
     private String queryName;
 
-    public QueryNamePatchRequest(String id, String queryName) {
+    public QueryNamePatchRequest(UUID id, String queryName) {
         this.id = id;
         this.queryName = queryName;
     }
 
-    public String getId() {
+    public UUID getId() {
         return this.id;
     }
 

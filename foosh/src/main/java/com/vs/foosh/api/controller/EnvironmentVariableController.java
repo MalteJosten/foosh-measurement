@@ -1,5 +1,6 @@
 package com.vs.foosh.api.controller;
 
+import java.net.URI;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,8 +27,8 @@ public abstract class EnvironmentVariableController {
 
     @GetMapping("/vars")
     public ResponseEntity<Object> getVars() {
-        Map<String, String> linkBlock = new HashMap<>();
-        linkBlock.put("self", LinkBuilder.getVariableListLink().toString());
+        Map<String, URI> linkBlock = new HashMap<>();
+        linkBlock.put("self", LinkBuilder.getVariableListLink());
 
         return HttpResponseBuilder.buildResponse(
                 new AbstractMap.SimpleEntry<String, Object>("variables", EnvironmentVariableList.getVariables()),

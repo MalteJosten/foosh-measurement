@@ -29,10 +29,10 @@ public class DeviceList {
     }
 
     public void pushDevice(AbstractDevice device) {
-        if (isAUniqueQueryName(device.getQueryName(), device.getId().toString())) {
+        if (isAUniqueQueryName(device.getQueryName(), device.getId())) {
             getInstance().add(device);
         } else {
-            throw new QueryNameIsNotUniqueException(new QueryNamePatchRequest(device.getId().toString(), device.getQueryName()));
+            throw new QueryNameIsNotUniqueException(new QueryNamePatchRequest(device.getId(), device.getQueryName()));
         }
     }
 
@@ -59,12 +59,12 @@ public class DeviceList {
         throw new DeviceIdNotFoundException(id);
     }
 
-    public static boolean isAUniqueQueryName(String name, String id) {
+    public static boolean isAUniqueQueryName(String name, UUID id) {
         for (AbstractDevice d: getInstance()) {
             // Check whether the queryName 'name' is already used.
             if (d.getQueryName().equals(name)) {
                 // If it's already used, check whether it's the same device.
-                if (d.getId() == UUID.fromString(id)) {
+                if (d.getId() == id) {
                     return true;
                 }
 
@@ -82,11 +82,11 @@ public class DeviceList {
     ///
     public static String findUniqueQueryName(QueryNamePatchRequest request) {
         StringBuilder queryName = new StringBuilder(request.getQueryName());
-        String id = request.getId().toString();
+        UUID id = request.getId();
 
         // Does the field contain any letters, i.e., is it not empty?
         if (queryName.toString().trim().isEmpty()) {
-            queryName.replace(0, queryName.length(), getDevice(id).getDeviceName());
+            queryName.replace(0, queryName.length(), getDevice(id.toString()).getDeviceName());
         }
 
         for (int i = 0; i < UNIQUE_QUERY_NAME_TIMEOUT; i++) {
@@ -94,7 +94,7 @@ public class DeviceList {
             if (isAUniqueQueryName(queryName.toString(), id)) {
                 return queryName.toString();
             } else {
-                queryName.replace(0, queryName.length(), getDevice(id).getDeviceName() + (i+1));
+                queryName.replace(0, queryName.length(), getDevice(id.toString()).getDeviceName() + (i+1));
             }
         }
 
