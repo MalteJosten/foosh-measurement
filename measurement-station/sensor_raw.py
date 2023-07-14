@@ -8,7 +8,7 @@ from network import WLAN, STA_IF
 import secrets
 
 
-# Number of seconds to wait before starting with the next measurement cycle.
+# Number of seconds to wait before the next measurement.
 INTERVAL = 60
 # URL to which the POST-Request is sent to.
 REQUEST_URL = "http://192.168.108.103:3000/add"
@@ -28,7 +28,7 @@ class LightSensor():
 
             # Check if device is already connected to a network...
             if not(wlan.isconnected()):
-                # ...if not, try connect.
+                # ...if not, try to connect.
                 wlan.connect(secrets.SSID, secrets.PWD)
 
                 # Wait for the connection to be established.
@@ -79,9 +79,8 @@ ls.connect()
 while not(ls.has_connection):
     sleep(0.1)
 
-# Start measuremnt loop.
+# Start measurement loop.
 while True:
-    print("now")
     reading = ls.read_light()
     ls.send(reading)
     sleep(INTERVAL)
