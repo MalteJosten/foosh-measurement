@@ -17,11 +17,13 @@ INTERVAL = 15
 REQUEST_URL = "http://192.168.108.103:3000/add"
 # Number of seconds to wait for the network connection to be established.
 CON_TIMEOUT = 10
+# The number of the used GPIO Pin
+PIN = 28
 
 
 class LightSensor():
-    def __init__(self, pin):
-        self.adc = ADC(Pin(pin))
+    def __init__(self, PIN):
+        self.adc = ADC(Pin(PIN))
         self.has_connection = False
 
     def connect(self):
@@ -88,7 +90,7 @@ def average(list):
     return avg
 
 
-ls = LightSensor(28)
+ls = LightSensor()
 ls.connect()
 
 # Wait for the connection.
