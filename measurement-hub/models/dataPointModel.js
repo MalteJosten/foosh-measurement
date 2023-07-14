@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const envy = require('envy');
+const env  = envy();
 
 const DataPointSchema = new mongoose.Schema({
     timestamp: { type: Date, required: true },
@@ -40,7 +42,7 @@ const DataPointSchema = new mongoose.Schema({
                 }]
     }]
     },{
-        collection: "test_2023-07-11"
+        collection: env.db_name
     }
 );
 

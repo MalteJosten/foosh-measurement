@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const envy = require('envy');
+const env = envy();
 
 const router = require('./routes/add.js');
 
@@ -14,4 +16,4 @@ app.get('/', (req, res) => {
     res.send("Measurement Hub v0.0.1");
 });
 
-app.listen(3000, () => console.log("Server listens on port 3000"));
+app.listen(env.port, () => console.log("Server listens on port", env.port));
