@@ -9,15 +9,16 @@ INTERVAL = 120
 
 class LightControl:
     api_point = "localhost:8080"
-    api_path  = "Shelly_PlugS_Power"
+    lamp      = "plug1"
+    other     = "plug2"
 
-    def turnOnOff(self, to):
+    def turnOnOff(self, to, item):
         state = "OFF"
         if to:
             state = "ON"
 
         res = requests.post(
-                "http://" + self.api_point + "/rest/items/" + self.api_path,
+                "http://" + self.api_point + "/rest/items/" + item,
                 headers = {
                     'Content-Type': 'text/plain',
                     'Accept': 'application/json'
@@ -25,12 +26,12 @@ class LightControl:
                 data = state)
 
         with open("log.txt", "a") as log_file:
-            log_file.write("{}: Turned light {}\n".format(datetime.now(), state))
+            log_file.write("{}: Turned light {} {}\n".format(datetime.now(), item, state))
 
-    def chooseBehavior(self):
+    def chooseBehavior(self, item):
         choice = random.randint(0, 1)
 
-        self.turnOnOff((choice == 1))
+        self.turnOnOff((choice == 1), item)
 
 
 lc = LightControl()
@@ -38,4 +39,5 @@ lc.turnOnOff(False)
 
 while (True):
     time.sleep(INTERVAL)
-    lc.chooseBehavior()
+    lc.chooseBehavior(lamp)
+    lc.chooseBehavior(other)
