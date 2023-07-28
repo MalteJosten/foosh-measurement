@@ -30,10 +30,6 @@ const DataPointSchema = new mongoose.Schema({
                     type: String,
                     required: true,
                 },
-                category: {
-                    type: String,
-                    required: true
-                },
                 tags: [{
                     type: String
                 }],
@@ -42,7 +38,7 @@ const DataPointSchema = new mongoose.Schema({
                 }]
     }]
     },{
-        collection: env.db_name
+        collection: "2023-07-28_weekend"
     }
 );
 
