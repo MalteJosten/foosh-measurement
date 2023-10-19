@@ -18,7 +18,7 @@ There a two micropython scripts:
 The first script measures a single brightness value and transmits it to the hub.<br>
 The second script takes multiple measurements and transmits their average to the hub.
 
-The corresponding parameters may need to be adapted.
+The corresponding parameters `PROBES` and `INTERVAL` may need to be adapted.
 
 You also need to provide a `secrets.py` file with the fields `SSID` and `PWD` to be able to connect to the local wireless network.
 
